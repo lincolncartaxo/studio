@@ -30,7 +30,7 @@ export default function Footer() {
           <h3 className="font-bold text-lg">Siga-nos</h3>
           <a href="#" className="flex items-center gap-2 hover:text-primary transition-colors">
             <Instagram className="w-4 h-4" />
-            <span>@greenlyfestore</span>
+            <span>@greenlyfesaude</span>
           </a>
         </div>
       </div>
