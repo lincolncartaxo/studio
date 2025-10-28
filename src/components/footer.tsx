@@ -28,7 +28,7 @@ export default function Footer() {
         </div>
         <div className="flex flex-col gap-2">
           <h3 className="font-bold text-lg">Siga-nos</h3>
-          <a href="#" className="flex items-center gap-2 hover:text-primary transition-colors">
+          <a href="https://www.instagram.com/greenlyfesaude" className="flex items-center gap-2 hover:text-primary transition-colors">
             <Instagram className="w-4 h-4" />
             <span>@greenlyfesaude</span>
           </a>
