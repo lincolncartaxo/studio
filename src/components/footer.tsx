@@ -1,0 +1,42 @@
+import { Leaf, Phone, Mail, Instagram } from 'lucide-react';
+
+export default function Footer() {
+  return (
+    <footer className="bg-secondary/50 py-12 px-4 md:px-6 mt-16">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-secondary-foreground">
+        <div className="flex flex-col items-start gap-4">
+          <a href="#" className="flex items-center gap-2">
+            <Leaf className="w-8 h-8 text-primary" />
+            <span className="text-2xl font-bold font-headline">
+              Greenlyfe Store
+            </span>
+          </a>
+          <p className="text-sm">
+            Sua loja de produtos naturais para uma vida mais saudável.
+          </p>
+        </div>
+        <div className="flex flex-col gap-2">
+          <h3 className="font-bold text-lg">Contato</h3>
+          <a href="https://wa.me/558399999999" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
+            <Phone className="w-4 h-4" />
+            <span>+55 (83) 99999-9999</span>
+          </a>
+          <a href="mailto:contato@greenlyfe.store" className="flex items-center gap-2 hover:text-primary transition-colors">
+            <Mail className="w-4 h-4" />
+            <span>contato@greenlyfe.store</span>
+          </a>
+        </div>
+        <div className="flex flex-col gap-2">
+          <h3 className="font-bold text-lg">Siga-nos</h3>
+          <a href="#" className="flex items-center gap-2 hover:text-primary transition-colors">
+            <Instagram className="w-4 h-4" />
+            <span>@greenlyfestore</span>
+          </a>
+        </div>
+      </div>
+      <div className="container mx-auto mt-8 pt-8 border-t border-secondary-foreground/20 text-center text-sm text-secondary-foreground/80">
+        <p>&copy; {new Date().getFullYear()} Greenlyfe Store. Todos os direitos reservados.</p>
+      </div>
+    </footer>
+  );
+}

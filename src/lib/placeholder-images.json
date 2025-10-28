@@ -1,3 +1,70 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "quinoa-grain",
+      "description": "Organic Quinoa Grain",
+      "imageUrl": "https://images.unsplash.com/photo-1708949125682-c0cb09727101?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cXVpbm9hJTIwYm93bHxlbnwwfHx8fDE3NjE2MTYwNTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "quinoa bowl"
+    },
+    {
+      "id": "chia-seeds",
+      "description": "Chia Seeds",
+      "imageUrl": "https://images.unsplash.com/photo-1651256785597-4efe48fd71f9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjaGlhJTIwc2VlZHN8ZW58MHx8fHwxNzYxNTkxODc4fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "chia seeds"
+    },
+    {
+      "id": "oats",
+      "description": "Organic Rolled Oats",
+      "imageUrl": "https://images.unsplash.com/photo-1631077017682-70c1f4d24f4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxvYXRzJTIwYm93bHxlbnwwfHx8fDE3NjE2MzE5OTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "oats bowl"
+    },
+    {
+      "id": "protein-powder",
+      "description": "Vegan Protein Powder",
+      "imageUrl": "https://images.unsplash.com/photo-1680265158261-5fd6ba5d9959?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwcm90ZWluJTIwcG93ZGVyfGVufDB8fHx8MTc2MTU1OTc5OHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "protein powder"
+    },
+    {
+      "id": "vitamin-d",
+      "description": "Vitamin D3 Capsules",
+      "imageUrl": "https://images.unsplash.com/photo-1704650311329-fb978a50e5e6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx2aXRhbWluJTIwY2Fwc3VsZXN8ZW58MHx8fHwxNzYxNjMxOTkyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "vitamin capsules"
+    },
+    {
+      "id": "omega-3",
+      "description": "Omega-3 Supplement",
+      "imageUrl": "https://images.unsplash.com/photo-1670850757896-e1b6c3e311ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxmaXNoJTIwb2lsfGVufDB8fHx8MTc2MTYzMTk5Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "fish oil"
+    },
+    {
+      "id": "green-juice",
+      "description": "Cold-Pressed Green Juice",
+      "imageUrl": "https://images.unsplash.com/photo-1601091566377-17adfa2fa02e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxncmVlbiUyMGp1aWNlfGVufDB8fHx8MTc2MTYzMTk5Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "green juice"
+    },
+    {
+      "id": "detox-shake",
+      "description": "Detox Berry Shake",
+      "imageUrl": "https://images.unsplash.com/photo-1615478503562-ec2d8aa0e24e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxiZXJyeSUyMHNtb290aGllfGVufDB8fHx8MTc2MTU3MzQ0NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "berry smoothie"
+    },
+    {
+      "id": "energy-smoothie",
+      "description": "Tropical Energy Smoothie",
+      "imageUrl": "https://images.unsplash.com/photo-1550461716-dbf266b2a8a7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHx0cm9waWNhbCUyMHNtb290aGllfGVufDB8fHx8MTc2MTYzMTk5Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "tropical smoothie"
+    },
+    {
+      "id": "hero-image",
+      "description": "A vibrant display of fresh, natural products.",
+      "imageUrl": "https://images.unsplash.com/photo-1608571424266-edeb9bbefdec?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxuYXR1cmFsJTIwcHJvZHVjdHN8ZW58MHx8fHwxNzYxNjMxOTkyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "natural products"
+    },
+    {
+      "id": "assistant-image",
+      "description": "A friendly nutritionist smiling.",
+      "imageUrl": "https://images.unsplash.com/photo-1675526607070-f5cbd71dde92?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxudXRyaXRpb25pc3QlMjBzbWlsaW5nfGVufDB8fHx8MTc2MTYzMTk5Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "nutritionist smiling"
+    }
+  ]
 }
