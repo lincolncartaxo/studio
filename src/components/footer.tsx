@@ -21,7 +21,7 @@ export default function Footer() {
             <Phone className="w-4 h-4" />
             <span>+55 (83) 98784-8625</span>
           </a>
-          <a href="mailto:contato@greenlyfe.store" className="flex items-center gap-2 hover:text-primary transition-colors">
+          <a href="mailto:greenlyfesaude@gmail.com" className="flex items-center gap-2 hover:text-primary transition-colors">
             <Mail className="w-4 h-4" />
             <span>greenlyfesaude@gmail.com</span>
           </a>
