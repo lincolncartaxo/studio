@@ -23,7 +23,7 @@ export default function Footer() {
           </a>
           <a href="mailto:contato@greenlyfe.store" className="flex items-center gap-2 hover:text-primary transition-colors">
             <Mail className="w-4 h-4" />
-            <span>contato@greenlyfe.store</span>
+            <span>greenlyfesaude@gmail.com</span>
           </a>
         </div>
         <div className="flex flex-col gap-2">
