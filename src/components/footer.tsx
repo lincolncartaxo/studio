@@ -17,9 +17,9 @@ export default function Footer() {
         </div>
         <div className="flex flex-col gap-2">
           <h3 className="font-bold text-lg">Contato</h3>
-          <a href="https://wa.me/558399999999" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
+          <a href="https://wa.me/5583987848625" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
             <Phone className="w-4 h-4" />
-            <span>+55 (83) 99999-9999</span>
+            <span>+55 (83) 98784-8625</span>
           </a>
           <a href="mailto:contato@greenlyfe.store" className="flex items-center gap-2 hover:text-primary transition-colors">
             <Mail className="w-4 h-4" />
