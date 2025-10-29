@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'Greenlyfe Store',
+  title: 'Greenlyfe',
   description: 'Sua loja de produtos naturais para uma vida mais saudável.',
 };
 
