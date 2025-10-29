@@ -19,7 +19,7 @@ export default function Footer() {
           <h3 className="font-bold text-lg">Contato</h3>
           <a href="https://maps.app.goo.gl/NXwafXEdpRdj4KKw5" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
             <MapPin className="w-4 h-4" /> 
-            <span>Av. Gov. Flávio Ribeiro Coutinho, 500 - Jardim Oceania, João Pessoa - PB, 58037-005</span>
+            <span>Av. Gov. Flávio Ribeiro Coutinho, 500, Loja 237 - Jardim Oceania, João Pessoa - PB, 58037-005</span>
           </a>
           <a href="https://wa.me/5583987848625" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
             <Phone className="w-4 h-4" />
