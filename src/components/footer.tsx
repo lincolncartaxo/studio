@@ -36,7 +36,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="container mx-auto mt-8 pt-8 border-t border-secondary-foreground/20 text-center text-sm text-secondary-foreground/80">
-        <p>&copy; {new Date().getFullYear()} Greenlyfe Store. Todos os direitos reservados.</p>
+        <p>&copy; {new Date().getFullYear()} Greenlyfe. Todos os direitos reservados.</p>
       </div>
     </footer>
   );
