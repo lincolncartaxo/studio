@@ -22,9 +22,9 @@ export default function Footer() {
             <Mail className="w-4 h-4" />
             <span>greenlyfesaude@gmail.com</span>
           </a>
-          <a href="https://maps.app.goo.gl/NXwafXEdpRdj4KKw5" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
-            <MapPin className="w-4 h-4" /> 
-            <span>Av. Gov. Flávio Ribeiro Coutinho, 500, Loja 237 - Jardim Oceania, João Pessoa - PB, 58037-005</span>
+          <a href="https://maps.app.goo.gl/NXwafXEdpRdj4KKw5" target="_blank" rel="noopener noreferrer" className="flex items-start gap-2 hover:text-primary transition-colors">
+            <MapPin className="w-4 h-4 mt-1" /> 
+            <span className="flex-1">Av. Gov. Flávio Ribeiro Coutinho, 500, Loja 237 - Jardim Oceania, João Pessoa - PB, 58037-005</span>
           </a>
         </div>
         <div className="flex flex-col gap-2">
