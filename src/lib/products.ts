@@ -18,7 +18,7 @@ export const products: Product[] = [
     category: 'grains',
     description: 'Grãos de quinoa orgânica, ricos em proteínas e fibras. Perfeito para uma refeição saudável e completa.',
     price: 25.50,
-    unit: 'kg',
+    unit: 'g',
     image: getImage('quinoa-grain'),
   },
   {
@@ -27,7 +27,7 @@ export const products: Product[] = [
     category: 'grains',
     description: 'Sementes de chia ricas em ômega-3, fibras e antioxidantes. Ideal para adicionar em iogurtes e smoothies.',
     price: 15.00,
-    unit: 'kg',
+    unit: 'g',
     image: getImage('chia-seeds'),
   },
   {
@@ -36,7 +36,7 @@ export const products: Product[] = [
     category: 'grains',
     description: 'Aveia orgânica em flocos, fonte de energia de liberação lenta e fibras solúveis.',
     price: 12.90,
-    unit: 'kg',
+    unit: 'g',
     image: getImage('oats'),
   },
   {
