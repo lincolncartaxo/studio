@@ -7,6 +7,7 @@ export type Product = {
   category: 'grains' | 'supplements' | 'juices';
   description: string;
   price: number;
+  unit: 'kg' | 'g' | 'un' | 'ml' | 'l'; // unidade de medida
   image: ImagePlaceholder;
 };
 
@@ -17,6 +18,7 @@ export const products: Product[] = [
     category: 'grains',
     description: 'Grãos de quinoa orgânica, ricos em proteínas e fibras. Perfeito para uma refeição saudável e completa.',
     price: 25.50,
+    unit: 'kg',
     image: getImage('quinoa-grain'),
   },
   {
@@ -25,6 +27,7 @@ export const products: Product[] = [
     category: 'grains',
     description: 'Sementes de chia ricas em ômega-3, fibras e antioxidantes. Ideal para adicionar em iogurtes e smoothies.',
     price: 15.00,
+    unit: 'kg',
     image: getImage('chia-seeds'),
   },
   {
@@ -33,6 +36,7 @@ export const products: Product[] = [
     category: 'grains',
     description: 'Aveia orgânica em flocos, fonte de energia de liberação lenta e fibras solúveis.',
     price: 12.90,
+    unit: 'kg',
     image: getImage('oats'),
   },
   {
@@ -41,6 +45,7 @@ export const products: Product[] = [
     category: 'supplements',
     description: 'Mix de proteínas vegetais (ervilha, arroz e chia) para recuperação muscular e aporte proteico.',
     price: 99.90,
+    unit: 'un',
     image: getImage('protein-powder'),
   },
   {
@@ -49,6 +54,7 @@ export const products: Product[] = [
     category: 'supplements',
     description: 'Cápsulas de Vitamina D3 para saúde óssea e fortalecimento do sistema imunológico.',
     price: 45.00,
+    unit: 'un',
     image: getImage('vitamin-d'),
   },
   {
@@ -57,6 +63,7 @@ export const products: Product[] = [
     category: 'supplements',
     description: 'Suplemento de ômega 3 de óleo de peixe, essencial para a saúde do cérebro e coração.',
     price: 65.00,
+    unit: 'un',
     image: getImage('omega-3'),
   },
   {
@@ -65,6 +72,7 @@ export const products: Product[] = [
     category: 'juices',
     description: 'Suco prensado a frio com couve, espinafre, maçã, pepino e limão. Revitalizante e nutritivo.',
     price: 18.00,
+    unit: 'ml',
     image: getImage('green-juice'),
   },
   {
@@ -73,6 +81,7 @@ export const products: Product[] = [
     category: 'juices',
     description: 'Shake antioxidante com morango, mirtilo, amora e banana. Uma explosão de sabor e saúde.',
     price: 22.00,
+    unit: 'ml',
     image: getImage('detox-shake'),
   },
   {
@@ -81,6 +90,7 @@ export const products: Product[] = [
     category: 'juices',
     description: 'Smoothie tropical com manga, abacaxi e maracujá. Perfeito para um boost de energia.',
     price: 20.00,
+    unit: 'ml',
     image: getImage('energy-smoothie'),
   },
 ];
