@@ -274,7 +274,7 @@ export const products: Product[] = [
     price: 15.00,
     unit: 'g',
     image: getImage('oat-flour'),
-  }
+  },
   // Grãos e Sementes (Adicionais - Total 16)
   {
     id: 'arroz-integral',
