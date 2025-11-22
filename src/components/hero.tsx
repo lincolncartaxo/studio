@@ -1,17 +1,15 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { getImage } from '@/lib/images';
 
 export default function Hero() {
   const heroImage = getImage('hero-image');
   return (
     <section className="relative w-full h-[60vh] md:h-[70vh] flex items-center justify-center text-center">
       <Image
-        src={heroImage.imageUrl}
-        alt={heroImage.description}
+        src="/fachada_loja.jpeg"
+        alt="Fachada da Loja Greenlyfe"
         fill
         className="object-cover brightness-50"
-        data-ai-hint={heroImage.imageHint}
         priority
       />
       <div className="relative z-10 p-4 text-white">
