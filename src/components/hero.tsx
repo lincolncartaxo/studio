@@ -16,7 +16,7 @@ export default function Hero() {
       />
       <div className="relative z-10 p-4 text-white">
         <h1 className="text-4xl md:text-6xl font-bold font-headline mb-4 drop-shadow-lg">
-          Viva uma Vida mais <span className="text-primary">Verde</span>
+          Seu Bem Estar, <span className="text-primary">Nossa Natureza</span>
         </h1>
         <p className="text-lg md:text-xl max-w-2xl mx-auto mb-8 drop-shadow-md">
           Encontre os melhores produtos naturais para seu bem-estar. Qualidade e sabor que transformam sua rotina.
