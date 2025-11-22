@@ -2,7 +2,6 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
 export default function Hero() {
-  const heroImage = getImage('hero-image');
   return (
     <section className="relative w-full h-[60vh] md:h-[70vh] flex items-center justify-center text-center">
       <Image
