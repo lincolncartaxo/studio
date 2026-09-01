@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import ProductCard from "@/components/product-card";
 import { products } from '@/lib/products';
-import { Wheat, Pill, GlassWater, Search, X, Grid3x3, List } from 'lucide-react';
+import { CupSoda, BatteryCharging, Coffee, Apple, Pizza, Utensils, Wine, GlassWater, Search, X, Grid3x3, List } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -16,9 +16,14 @@ import {
 } from "@/components/ui/select";
 
 const categories = [
-  { value: 'grains', label: 'Grãos Orgânicos', icon: Wheat },
-  { value: 'supplements', label: 'Suplementos', icon: Pill },
-  { value: 'juices', label: 'Sucos & Shakes', icon: GlassWater },
+  { value: 'sucos-naturais', label: 'Sucos Naturais', icon: GlassWater },
+  { value: 'sucos-funcionais', label: 'Funcionais', icon: CupSoda },
+  { value: 'vitaminas-energeticos', label: 'Vitaminas', icon: BatteryCharging },
+  { value: 'shakes-proteicos', label: 'Shakes', icon: Coffee },
+  { value: 'acai', label: 'Açaí', icon: Apple },
+  { value: 'salgados', label: 'Salgados', icon: Pizza },
+  { value: 'refeicoes', label: 'Refeições', icon: Utensils },
+  { value: 'bebidas', label: 'Bebidas', icon: Wine },
 ];
 
 type SortOption = 'newest' | 'price-asc' | 'price-desc' | 'name';
@@ -33,7 +38,7 @@ const sortOptions = [
 
 export default function ProductCatalog() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('grains');
+  const [selectedCategory, setSelectedCategory] = useState('sucos-naturais');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [displayedCount, setDisplayedCount] = useState(12);
@@ -180,9 +185,9 @@ export default function ProductCatalog() {
           setSelectedCategory(value);
           setDisplayedCount(productsPerPage);
         }} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-8 mb-8 h-auto">
             {categories.map(({ value, label, icon: Icon }) => (
-              <TabsTrigger key={value} value={value} className="flex gap-2 items-center">
+              <TabsTrigger key={value} value={value} className="flex flex-col md:flex-row gap-2 items-center py-2 h-auto">
                 <Icon className="w-5 h-5" />
                 <span className="hidden sm:inline">{label}</span>
                 <span className="text-xs text-muted-foreground ml-1">
