@@ -1,0 +1,2213 @@
+From dca5f4baa1de88eb27925c9a896e3217eb446be8 Mon Sep 17 00:00:00 2001
+From: "Chaves (OpenClaw)" <chaves@openclaw.ai>
+Date: Tue, 1 Sep 2026 16:12:19 +0000
+Subject: [PATCH 1/2] =?UTF-8?q?Atualiza=20cat=C3=A1logo=20com=20novo=20car?=
+ =?UTF-8?q?d=C3=A1pio?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+---
+ src/components/product-catalog.tsx |  19 +-
+ src/lib/products.ts                | 971 ++---------------------------
+ update-catalog.js                  |  31 +
+ 3 files changed, 105 insertions(+), 916 deletions(-)
+ create mode 100644 update-catalog.js
+
+diff --git a/src/components/product-catalog.tsx b/src/components/product-catalog.tsx
+index 80064d4..7f3c471 100644
+--- a/src/components/product-catalog.tsx
++++ b/src/components/product-catalog.tsx
+@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+ import { Input } from "@/components/ui/input";
+ import ProductCard from "@/components/product-card";
+ import { products } from '@/lib/products';
+-import { Wheat, Pill, GlassWater, Search, X, Grid3x3, List } from 'lucide-react';
++import { CupSoda, BatteryCharging, Coffee, Apple, Pizza, Utensils, Wine, GlassWater, Search, X, Grid3x3, List } from 'lucide-react';
+ import { useState, useMemo } from 'react';
+ import { Button } from '@/components/ui/button';
+ import {
+@@ -16,9 +16,14 @@ import {
+ } from "@/components/ui/select";
+ 
+ const categories = [
+-  { value: 'grains', label: 'Grãos Orgânicos', icon: Wheat },
+-  { value: 'supplements', label: 'Suplementos', icon: Pill },
+-  { value: 'juices', label: 'Sucos & Shakes', icon: GlassWater },
++  { value: 'sucos-naturais', label: 'Sucos Naturais', icon: GlassWater },
++  { value: 'sucos-funcionais', label: 'Funcionais', icon: CupSoda },
++  { value: 'vitaminas-energeticos', label: 'Vitaminas', icon: BatteryCharging },
++  { value: 'shakes-proteicos', label: 'Shakes', icon: Coffee },
++  { value: 'acai', label: 'Açaí', icon: Apple },
++  { value: 'salgados', label: 'Salgados', icon: Pizza },
++  { value: 'refeicoes', label: 'Refeições', icon: Utensils },
++  { value: 'bebidas', label: 'Bebidas', icon: Wine },
+ ];
+ 
+ type SortOption = 'newest' | 'price-asc' | 'price-desc' | 'name';
+@@ -33,7 +38,7 @@ const sortOptions = [
+ 
+ export default function ProductCatalog() {
+   const [searchQuery, setSearchQuery] = useState('');
+-  const [selectedCategory, setSelectedCategory] = useState('grains');
++  const [selectedCategory, setSelectedCategory] = useState('sucos-naturais');
+   const [sortBy, setSortBy] = useState<SortOption>('newest');
+   const [viewMode, setViewMode] = useState<ViewMode>('grid');
+   const [displayedCount, setDisplayedCount] = useState(12);
+@@ -180,9 +185,9 @@ export default function ProductCatalog() {
+           setSelectedCategory(value);
+           setDisplayedCount(productsPerPage);
+         }} className="w-full">
+-          <TabsList className="grid w-full grid-cols-3 mb-8">
++          <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-8 mb-8 h-auto">
+             {categories.map(({ value, label, icon: Icon }) => (
+-              <TabsTrigger key={value} value={value} className="flex gap-2 items-center">
++              <TabsTrigger key={value} value={value} className="flex flex-col md:flex-row gap-2 items-center py-2 h-auto">
+                 <Icon className="w-5 h-5" />
+                 <span className="hidden sm:inline">{label}</span>
+                 <span className="text-xs text-muted-foreground ml-1">
+diff --git a/src/lib/products.ts b/src/lib/products.ts
+index 6a3becd..638e2a5 100644
+--- a/src/lib/products.ts
++++ b/src/lib/products.ts
+@@ -1,930 +1,83 @@
+ import type { ImagePlaceholder } from './placeholder-images';
+ import { getImage } from './images';
+ 
++export type CategoryType = 'sucos-naturais' | 'sucos-funcionais' | 'vitaminas-energeticos' | 'shakes-proteicos' | 'acai' | 'salgados' | 'refeicoes' | 'bebidas';
++
+ export type Product = {
+   id: string;
+   name: string;
+-  category: 'grains' | 'supplements' | 'juices' | 'nuts' | 'oils' | 'flours';
++  category: CategoryType;
+   description: string;
+   price: number;
+-  unit: 'kg' | 'g' | 'un' | 'ml' | 'l';
++  unit: 'un' | 'ml';
+   image: ImagePlaceholder;
+ };
+ 
+ export const products: Product[] = [
+-  // Grãos e Sementes
+-  {
+-    id: 'quinoa',
+-    name: 'Quinoa Orgânica',
+-    category: 'grains',
+-    description: 'Grãos de quinoa orgânica, ricos em proteínas e fibras. Perfeito para uma refeição saudável e completa.',
+-    price: 25.50,
+-    unit: 'g',
+-    image: getImage('quinoa-grain'),
+-  },
+-  {
+-    id: 'chia',
+-    name: 'Sementes de Chia',
+-    category: 'grains',
+-    description: 'Sementes de chia ricas em ômega-3, fibras e antioxidantes. Ideal para adicionar em iogurtes e smoothies.',
+-    price: 15.00,
+-    unit: 'g',
+-    image: getImage('chia-seeds'),
+-  },
+-  {
+-    id: 'oats',
+-    name: 'Aveia em Flocos',
+-    category: 'grains',
+-    description: 'Aveia orgânica em flocos, fonte de energia de liberação lenta e fibras solúveis.',
+-    price: 12.90,
+-    unit: 'g',
+-    image: getImage('oats'),
+-  },
+-  {
+-    id: 'linhaça-dourada',
+-    name: 'Linhaça Dourada',
+-    category: 'grains',
+-    description: 'Sementes de linhaça dourada, excelente fonte de fibras e ômega-3.',
+-    price: 8.50,
+-    unit: 'g',
+-    image: getImage('flax-seeds'),
+-  },
+-  {
+-    id: 'amaranto',
+-    name: 'Grão de Amaranto',
+-    category: 'grains',
+-    description: 'Grão de amaranto sem glúten, rico em proteínas e aminoácidos essenciais.',
+-    price: 18.75,
+-    unit: 'g',
+-    image: getImage('amaranth'),
+-  },
+-  {
+-    id: 'trigo-sarraceno',
+-    name: 'Trigo Sarraceno',
+-    category: 'grains',
+-    description: 'Trigo sarraceno orgânico, ideal para dietas sem glúten e rico em nutrientes.',
+-    price: 22.00,
+-    unit: 'g',
+-    image: getImage('buckwheat'),
+-  },
+-
+-  // Suplementos
+-  {
+-    id: 'protein',
+-    name: 'Proteína Vegana',
+-    category: 'supplements',
+-    description: 'Mix de proteínas vegetais (ervilha, arroz e chia) para recuperação muscular e aporte proteico.',
+-    price: 99.90,
+-    unit: 'un',
+-    image: getImage('protein-powder'),
+-  },
+-  {
+-    id: 'vitamin-d',
+-    name: 'Vitamina D3',
+-    category: 'supplements',
+-    description: 'Cápsulas de Vitamina D3 para saúde óssea e fortalecimento do sistema imunológico.',
+-    price: 45.00,
+-    unit: 'un',
+-    image: getImage('vitamin-d'),
+-  },
+-  {
+-    id: 'omega-3',
+-    name: 'Ômega 3',
+-    category: 'supplements',
+-    description: 'Suplemento de ômega 3 de óleo de peixe, essencial para a saúde do cérebro e coração.',
+-    price: 65.00,
+-    unit: 'un',
+-    image: getImage('omega-3'),
+-  },
+-  {
+-    id: 'spirulina',
+-    name: 'Spirulina em Pó',
+-    category: 'supplements',
+-    description: 'Spirulina orgânica em pó, superalimento rico em proteínas, vitaminas e minerais.',
+-    price: 55.00,
+-    unit: 'g',
+-    image: getImage('spirulina'),
+-  },
+-  {
+-    id: 'colageno',
+-    name: 'Colágeno Hidrolisado',
+-    category: 'supplements',
+-    description: 'Colágeno hidrolisado para saúde da pele, cabelos e articulações.',
+-    price: 75.00,
+-    unit: 'g',
+-    image: getImage('collagen'),
+-  },
+-  {
+-    id: 'probiotico',
+-    name: 'Probiótico 30 Bilhões',
+-    category: 'supplements',
+-    description: 'Cápsulas de probiótico com 30 bilhões de UFC para saúde intestinal.',
+-    price: 89.90,
+-    unit: 'un',
+-    image: getImage('probiotic'),
+-  },
+-
+-  // Sucos e Bebidas
+-  {
+-    id: 'green-juice',
+-    name: 'Suco Verde Detox',
+-    category: 'juices',
+-    description: 'Suco prensado a frio com couve, espinafre, maçã, pepino e limão. Revitalizante e nutritivo.',
+-    price: 18.00,
+-    unit: 'ml',
+-    image: getImage('green-juice'),
+-  },
+-  {
+-    id: 'berry-shake',
+-    name: 'Shake de Frutas Vermelhas',
+-    category: 'juices',
+-    description: 'Shake antioxidante com morango, mirtilo, amora e banana. Uma explosão de sabor e saúde.',
+-    price: 22.00,
+-    unit: 'ml',
+-    image: getImage('detox-shake'),
+-  },
+-  {
+-    id: 'energy-smoothie',
+-    name: 'Smoothie Energético',
+-    category: 'juices',
+-    description: 'Smoothie tropical com manga, abacaxi e maracujá. Perfeito para um boost de energia.',
+-    price: 20.00,
+-    unit: 'ml',
+-    image: getImage('energy-smoothie'),
+-  },
+-  {
+-    id: 'suco-laranja-cenoura',
+-    name: 'Suco de Laranja com Cenoura',
+-    category: 'juices',
+-    description: 'Suco natural de laranja com cenoura, rico em vitamina A e C.',
+-    price: 15.00,
+-    unit: 'ml',
+-    image: getImage('orange-carrot-juice'),
+-  },
+-  {
+-    id: 'shot-detox',
+-    name: 'Shot Detox de Gengibre',
+-    category: 'juices',
+-    description: 'Shot concentrado de gengibre e limão para imunidade e digestão.',
+-    price: 12.00,
+-    unit: 'ml',
+-    image: getImage('ginger-shot'),
+-  },
+-  {
+-    id: 'agua-coco',
+-    name: 'Água de Coco Natural',
+-    category: 'juices',
+-    description: 'Água de coco 100% natural, isotônico natural rico em eletrólitos.',
+-    price: 10.00,
+-    unit: 'ml',
+-    image: getImage('coconut-water'),
+-  },
+-
+-  // Castanhas e Oleaginosas
+-  {
+-    id: 'castanha-para',
+-    name: 'Castanha do Pará',
+-    category: 'nuts',
+-    description: 'Castanha do Pará orgânica, uma das melhores fontes naturais de selênio.',
+-    price: 35.00,
+-    unit: 'g',
+-    image: getImage('brazil-nuts'),
+-  },
+-  {
+-    id: 'amendoas',
+-    name: 'Amêndoas Cruas',
+-    category: 'nuts',
+-    description: 'Amêndoas cruas e sem sal, ricas em vitamina E e gorduras boas.',
+-    price: 28.50,
+-    unit: 'g',
+-    image: getImage('almonds'),
+-  },
+-  {
+-    id: 'nozes',
+-    name: 'Nozes Pecan',
+-    category: 'nuts',
+-    description: 'Nozes pecan selecionadas, perfeitas para lanches e receitas.',
+-    price: 42.00,
+-    unit: 'g',
+-    image: getImage('pecan-nuts'),
+-  },
+-  {
+-    id: 'castanha-caju',
+-    name: 'Castanha de Caju',
+-    category: 'nuts',
+-    description: 'Castanha de caju torrada sem sal, fonte de zinco e magnésio.',
+-    price: 25.00,
+-    unit: 'g',
+-    image: getImage('cashew-nuts'),
+-  },
++  { id: 'suco-acerola', name: 'Suco de Acerola', category: 'sucos-naturais', description: 'Feito na hora', price: 8.00, unit: 'un', image: getImage('juice') },
++  { id: 'suco-maracuja', name: 'Suco de Maracujá', category: 'sucos-naturais', description: 'Feito na hora', price: 8.00, unit: 'un', image: getImage('juice') },
++  { id: 'suco-tangerina', name: 'Suco de Tangerina', category: 'sucos-naturais', description: 'Feito na hora', price: 8.00, unit: 'un', image: getImage('juice') },
++  { id: 'suco-morango', name: 'Suco de Morango', category: 'sucos-naturais', description: 'Feito na hora', price: 8.00, unit: 'un', image: getImage('juice') },
++  { id: 'suco-cupuacu', name: 'Suco de Cupuaçu', category: 'sucos-naturais', description: 'Feito na hora', price: 8.00, unit: 'un', image: getImage('juice') },
++  { id: 'suco-caja', name: 'Suco de Cajá', category: 'sucos-naturais', description: 'Feito na hora', price: 8.00, unit: 'un', image: getImage('juice') },
++  { id: 'suco-abacaxi', name: 'Suco de Abacaxi', category: 'sucos-naturais', description: 'Feito na hora', price: 8.00, unit: 'un', image: getImage('juice') },
++  { id: 'suco-graviola', name: 'Suco de Graviola', category: 'sucos-naturais', description: 'Feito na hora', price: 8.00, unit: 'un', image: getImage('juice') },
+ 
+-  // Óleos e Manteigas
+-  {
+-    id: 'azeite-extra-virgem',
+-    name: 'Azeite Extra Virgem',
+-    category: 'oils',
+-    description: 'Azeite extra virgem prensado a frio, ideal para saladas e finalizações.',
+-    price: 45.00,
+-    unit: 'ml',
+-    image: getImage('olive-oil'),
+-  },
+-  {
+-    id: 'oleo-coco',
+-    name: 'Óleo de Coco Extra Virgem',
+-    category: 'oils',
+-    description: 'Óleo de coco extra virgem orgânico, versátil para culinária e cuidados pessoais.',
+-    price: 38.00,
+-    unit: 'ml',
+-    image: getImage('coconut-oil'),
+-  },
+-  {
+-    id: 'manteiga-amendoim',
+-    name: 'Manteiga de Amendoim Natural',
+-    category: 'oils',
+-    description: 'Manteiga de amendoim 100% natural, sem açúcar ou conservantes.',
+-    price: 22.00,
+-    unit: 'g',
+-    image: getImage('peanut-butter'),
+-  },
++  { id: 'func-citrico', name: 'Cítrico Refrescante', category: 'sucos-funcionais', description: 'Morango + Tangerina', price: 11.00, unit: 'un', image: getImage('detox-shake') },
++  { id: 'func-amarelas', name: 'Frutas Amarelas', category: 'sucos-funcionais', description: 'Manga + Maracujá + Pêssego + Cajá', price: 11.00, unit: 'un', image: getImage('detox-shake') },
++  { id: 'func-relax', name: 'Relax', category: 'sucos-funcionais', description: 'Morango + Maracujá', price: 11.00, unit: 'un', image: getImage('detox-shake') },
++  { id: 'func-energetico', name: 'Energético Natural', category: 'sucos-funcionais', description: 'Manga + Morango + Gengibre', price: 11.00, unit: 'un', image: getImage('energy-smoothie') },
++  { id: 'func-pre-treino', name: 'Pré-Treino', category: 'sucos-funcionais', description: 'Uva + Acerola + Beterraba + Morango', price: 11.00, unit: 'un', image: getImage('energy-smoothie') },
++  { id: 'func-detox', name: 'Detox Green', category: 'sucos-funcionais', description: 'Abacaxi + Hortelã + Couve + Gengibre + Limão', price: 11.00, unit: 'un', image: getImage('green-juice') },
++  { id: 'func-vermelhas', name: 'Frutas Vermelhas', category: 'sucos-funcionais', description: 'Morango + Uva + Amora + Mirtilo', price: 11.00, unit: 'un', image: getImage('detox-shake') },
+ 
+-  // Farinhas e Bases
+-  {
+-    id: 'farinha-amendoa',
+-    name: 'Farinha de Amêndoa',
+-    category: 'flours',
+-    description: 'Farinha de amêndoa fina, ideal para receitas low-carb e sem glúten.',
+-    price: 32.00,
+-    unit: 'g',
+-    image: getImage('almond-flour'),
+-  },
+-  {
+-    id: 'farinha-coco',
+-    name: 'Farinha de Coco',
+-    category: 'flours',
+-    description: 'Farinha de coco orgânica, rica em fibras e pobre em carboidratos.',
+-    price: 28.50,
+-    unit: 'g',
+-    image: getImage('coconut-flour'),
+-  },
+-  {
+-    id: 'farinha-aveia',
+-    name: 'Farinha de Aveia',
+-    category: 'flours',
+-    description: 'Farinha de aveia integral, perfeita para panquecas e bolos saudáveis.',
+-    price: 15.00,
+-    unit: 'g',
+-    image: getImage('oat-flour'),
+-  },
+-  // Grãos e Sementes (Adicionais - Total 16)
+-  {
+-    id: 'arroz-integral',
+-    name: 'Arroz Integral Orgânico',
+-    category: 'grains',
+-    description: 'Arroz integral de grão longo, rico em fibras e vitaminas do complexo B.',
+-    price: 10.90,
+-    unit: 'kg',
+-    image: getImage('brown-rice'),
+-  },
+-  {
+-    id: 'lentilha',
+-    name: 'Lentilha Canadense',
+-    category: 'grains',
+-    description: 'Lentilha de alta qualidade, excelente fonte de proteína vegetal e ferro.',
+-    price: 14.50,
+-    unit: 'kg',
+-    image: getImage('lentils'),
+-  },
+-  {
+-    id: 'grao-bico',
+-    name: 'Grão de Bico',
+-    category: 'grains',
+-    description: 'Grão de bico seco, ideal para hummus, saladas e pratos quentes.',
+-    price: 16.00,
+-    unit: 'kg',
+-    image: getImage('chickpeas'),
+-  },
+-  {
+-    id: 'feijao-preto',
+-    name: 'Feijão Preto Orgânico',
+-    category: 'grains',
+-    description: 'Feijão preto orgânico, essencial na culinária brasileira, rico em ferro.',
+-    price: 9.50,
+-    unit: 'kg',
+-    image: getImage('black-beans'),
+-  },
+-  {
+-    id: 'milho-pipoca',
+-    name: 'Milho para Pipoca Orgânico',
+-    category: 'grains',
+-    description: 'Milho para pipoca orgânico, sem agrotóxicos, para um lanche saudável.',
+-    price: 7.00,
+-    unit: 'kg',
+-    image: getImage('popcorn-corn'),
+-  },
+-  {
+-    id: 'cevada',
+-    name: 'Cevada em Grãos',
+-    category: 'grains',
+-    description: 'Cevada em grãos, excelente para sopas e saladas, fonte de betaglucanas.',
+-    price: 11.20,
+-    unit: 'kg',
+-    image: getImage('barley'),
+-  },
+-  {
+-    id: 'painco',
+-    name: 'Painço Descascado',
+-    category: 'grains',
+-    description: 'Painço descascado, grão sem glúten, versátil para diversas receitas.',
+-    price: 13.80,
+-    unit: 'g',
+-    image: getImage('millet'),
+-  },
+-  {
+-    id: 'gergelim',
+-    name: 'Gergelim Branco',
+-    category: 'grains',
+-    description: 'Sementes de gergelim branco, ricas em cálcio e magnésio.',
+-    price: 17.50,
+-    unit: 'g',
+-    image: getImage('sesame-seeds'),
+-  },
+-  {
+-    id: 'semente-girassol',
+-    name: 'Semente de Girassol',
+-    category: 'grains',
+-    description: 'Sementes de girassol cruas, ricas em vitamina E e gorduras saudáveis.',
+-    price: 19.00,
+-    unit: 'g',
+-    image: getImage('sunflower-seeds'),
+-  },
+-  {
+-    id: 'canjica',
+-    name: 'Canjica Branca',
+-    category: 'grains',
+-    description: 'Canjica branca, ideal para sobremesas e pratos típicos.',
+-    price: 6.50,
+-    unit: 'kg',
+-    image: getImage('hominy'),
+-  },
++  { id: 'vit-acai', name: 'Açaí Simples', category: 'vitaminas-energeticos', description: 'Vitamina de Açaí', price: 16.00, unit: 'un', image: getImage('energy-smoothie') },
++  { id: 'vit-guara', name: 'Guara Citro', category: 'vitaminas-energeticos', description: 'Guaraná Cítrico', price: 16.00, unit: 'un', image: getImage('energy-smoothie') },
++  { id: 'vit-cupuacu', name: 'Cupuaçu com leite e banana', category: 'vitaminas-energeticos', description: 'Cupuaçu, leite, banana', price: 16.00, unit: 'un', image: getImage('energy-smoothie') },
++  { id: 'vit-banana', name: 'Banana, leite, farinha láctea, aveia', category: 'vitaminas-energeticos', description: 'Vitamina tradicional', price: 16.00, unit: 'un', image: getImage('energy-smoothie') },
++  { id: 'vit-guaracai', name: 'Guaraçaí Power', category: 'vitaminas-energeticos', description: 'Limão, xarope, pó de guaraná, catuaba', price: 18.00, unit: 'un', image: getImage('energy-smoothie') },
++  { id: 'vit-acaipower', name: 'Açaí Power', category: 'vitaminas-energeticos', description: 'Açaí, banana, farinha de castanha, farinha de amendoim, leite desnatado e xarope de Guaraná', price: 18.00, unit: 'un', image: getImage('energy-smoothie') },
++  { id: 'vit-guaradoim', name: 'Guaradoim', category: 'vitaminas-energeticos', description: 'Banana, xarope, amendoim, limão, farinha de castanha, leite desnatado e pó de guaraná', price: 18.00, unit: 'un', image: getImage('energy-smoothie') },
++  { id: 'vit-amazonas', name: 'Suco do Amazonas', category: 'vitaminas-energeticos', description: 'Banana, amendoim, farinha de castanha, leite desnatado, xarope, marapuama, catuaba e pó de guaraná', price: 18.00, unit: 'un', image: getImage('energy-smoothie') },
+ 
+-  // Suplementos (Adicionais - Total 16)
+-  {
+-    id: 'creatina',
+-    name: 'Creatina Monohidratada',
+-    category: 'supplements',
+-    description: 'Suplemento de creatina para aumento de força e performance muscular.',
+-    price: 85.00,
+-    unit: 'un',
+-    image: getImage('creatine'),
+-  },
+-  {
+-    id: 'bcaa',
+-    name: 'BCAA em Pó',
+-    category: 'supplements',
+-    description: 'Aminoácidos de cadeia ramificada para recuperação e construção muscular.',
+-    price: 79.90,
+-    unit: 'un',
+-    image: getImage('bcaa'),
+-  },
+-  {
+-    id: 'multivitaminico',
+-    name: 'Multivitamínico Completo',
+-    category: 'supplements',
+-    description: 'Suplemento com vitaminas e minerais essenciais para o dia a dia.',
+-    price: 55.00,
+-    unit: 'un',
+-    image: getImage('multivitamin'),
+-  },
+-  {
+-    id: 'magnesio',
+-    name: 'Cloreto de Magnésio P.A.',
+-    category: 'supplements',
+-    description: 'Magnésio para saúde óssea, muscular e do sistema nervoso.',
+-    price: 35.00,
+-    unit: 'un',
+-    image: getImage('magnesium-chloride'),
+-  },
+-  {
+-    id: 'curcuma',
+-    name: 'Cúrcuma em Cápsulas',
+-    category: 'supplements',
+-    description: 'Cápsulas de cúrcuma com pimenta preta para máxima absorção e ação anti-inflamatória.',
+-    price: 49.90,
+-    unit: 'un',
+-    image: getImage('turmeric-capsules'),
+-  },
+-  {
+-    id: 'psyllium',
+-    name: 'Psyllium em Pó',
+-    category: 'supplements',
+-    description: 'Fibra solúvel natural para saúde intestinal e controle de apetite.',
+-    price: 29.00,
+-    unit: 'g',
+-    image: getImage('psyllium'),
+-  },
+-  {
+-    id: 'maca-peruana',
+-    name: 'Maca Peruana em Pó',
+-    category: 'supplements',
+-    description: 'Maca peruana para energia, vitalidade e equilíbrio hormonal.',
+-    price: 42.00,
+-    unit: 'g',
+-    image: getImage('maca-powder'),
+-  },
+-  {
+-    id: 'oleo-cartamo',
+-    name: 'Óleo de Cártamo em Cápsulas',
+-    category: 'supplements',
+-    description: 'Óleo de cártamo para auxílio na queima de gordura e definição muscular.',
+-    price: 59.00,
+-    unit: 'un',
+-    image: getImage('safflower-oil-capsules'),
+-  },
+-  {
+-    id: 'glucosamina',
+-    name: 'Glucosamina e Condroitina',
+-    category: 'supplements',
+-    description: 'Suplemento para saúde das articulações e cartilagens.',
+-    price: 68.00,
+-    unit: 'un',
+-    image: getImage('glucosamine-chondroitin'),
+-  },
+-  {
+-    id: 'vitamina-c',
+-    name: 'Vitamina C em Cápsulas',
+-    category: 'supplements',
+-    description: 'Vitamina C para fortalecimento do sistema imunológico e ação antioxidante.',
+-    price: 39.00,
+-    unit: 'un',
+-    image: getImage('vitamin-c-capsules'),
+-  },
++  { id: 'shake-cookies', name: 'Cookies Protein', category: 'shakes-proteicos', description: 'Leite desnatado, whey de cookies, pasta de amendoim sabor cookies, banana e gelo', price: 25.00, unit: 'un', image: getImage('protein-powder') },
++  { id: 'shake-morango', name: 'Morango Protein', category: 'shakes-proteicos', description: 'Morango, banana, leite desnatado, whey de morango, farinha de castanha e gelo', price: 25.00, unit: 'un', image: getImage('protein-powder') },
++  { id: 'shake-acai', name: 'Açaí Protein', category: 'shakes-proteicos', description: 'Açaí, banana, farinha láctea, aveia, leite desnatado, whey de baunilha, farinha de castanha e gelo', price: 25.00, unit: 'un', image: getImage('protein-powder') },
++  { id: 'shake-cappuccino', name: 'Shake de Cappuccino', category: 'shakes-proteicos', description: 'Café, leite desnatado, banana, pasta de amendoim de doce de leite, canela, whey de baunilha', price: 25.00, unit: 'un', image: getImage('protein-powder') },
++  { id: 'shake-chocolate', name: 'Shake de Chocolate', category: 'shakes-proteicos', description: 'Leite desnatado, chocolate meio amargo, banana, whey de chocolate', price: 25.00, unit: 'un', image: getImage('protein-powder') },
+ 
+-  // Sucos e Bebidas (Adicionais - Total 16)
+-  {
+-    id: 'kombucha-cha-verde',
+-    name: 'Kombucha Chá Verde e Gengibre',
+-    category: 'juices',
+-    description: 'Bebida fermentada probiótica, sabor chá verde e gengibre, para saúde intestinal.',
+-    price: 14.50,
+-    unit: 'ml',
+-    image: getImage('kombucha-green-ginger'),
+-  },
+-  {
+-    id: 'cha-hibisco',
+-    name: 'Chá de Hibisco Pronto',
+-    category: 'juices',
+-    description: 'Chá de hibisco natural, diurético e antioxidante, pronto para beber.',
+-    price: 9.00,
+-    unit: 'ml',
+-    image: getImage('hibiscus-tea'),
+-  },
+-  {
+-    id: 'suco-beterraba-laranja',
+-    name: 'Suco de Beterraba e Laranja',
+-    category: 'juices',
+-    description: 'Suco natural de beterraba e laranja, excelente pré-treino e fonte de energia.',
+-    price: 16.00,
+-    unit: 'ml',
+-    image: getImage('beet-orange-juice'),
+-  },
+-  {
+-    id: 'leite-amendoas',
+-    name: 'Leite de Amêndoas Orgânico',
+-    category: 'juices',
+-    description: 'Bebida vegetal de amêndoas, sem lactose e sem glúten, enriquecida com cálcio.',
+-    price: 19.90,
+-    unit: 'l',
+-    image: getImage('almond-milk'),
+-  },
+-  {
+-    id: 'suco-uva-integral',
+-    name: 'Suco de Uva Integral Orgânico',
+-    category: 'juices',
+-    description: 'Suco de uva integral, sem adição de açúcar, rico em resveratrol.',
+-    price: 18.00,
+-    unit: 'l',
+-    image: getImage('grape-juice'),
+-  },
+-  {
+-    id: 'shot-imunidade',
+-    name: 'Shot de Imunidade Cúrcuma e Própolis',
+-    category: 'juices',
+-    description: 'Shot concentrado para fortalecer o sistema imunológico.',
+-    price: 13.50,
+-    unit: 'ml',
+-    image: getImage('immunity-shot'),
+-  },
+-  {
+-    id: 'cha-matcha',
+-    name: 'Matcha Latte Pronto',
+-    category: 'juices',
+-    description: 'Bebida refrescante à base de matcha, com leite vegetal e levemente adoçado.',
+-    price: 15.00,
+-    unit: 'ml',
+-    image: getImage('matcha-latte'),
+-  },
+-  {
+-    id: 'suco-melancia',
+-    name: 'Suco de Melancia Natural',
+-    category: 'juices',
+-    description: 'Suco de melancia natural, hidratante e refrescante.',
+-    price: 11.00,
+-    unit: 'ml',
+-    image: getImage('watermelon-juice'),
+-  },
+-  {
+-    id: 'agua-saborizada',
+-    name: 'Água Saborizada Limão e Hortelã',
+-    category: 'juices',
+-    description: 'Água mineral com infusão natural de limão e hortelã.',
+-    price: 8.00,
+-    unit: 'ml',
+-    image: getImage('flavored-water'),
+-  },
+-  {
+-    id: 'leite-coco',
+-    name: 'Leite de Coco em Garrafa',
+-    category: 'juices',
+-    description: 'Leite de coco fresco, ideal para receitas e bebidas.',
+-    price: 17.00,
+-    unit: 'ml',
+-    image: getImage('coconut-milk-bottle'),
+-  },
++  { id: 'acai-300', name: 'Açaí na Tigela (Pequena)', category: 'acai', description: 'Açaí, banana, granola, leite em pó, amendoim, farinha de castanha, farinha láctea, mel ou leite condensado - 300ml', price: 25.00, unit: 'un', image: getImage('bowl') },
++  { id: 'acai-500', name: 'Açaí na Tigela (Grande)', category: 'acai', description: 'Açaí, banana, granola, leite em pó, amendoim, farinha de castanha, farinha láctea, mel ou leite condensado - 500ml', price: 30.00, unit: 'un', image: getImage('bowl') },
+ 
+-  // Castanhas e Oleaginosas (Adicionais - Total 16)
+-  {
+-    id: 'pistache',
+-    name: 'Pistache Torrado e Salgado',
+-    category: 'nuts',
+-    description: 'Pistache de alta qualidade, torrado e levemente salgado.',
+-    price: 55.00,
+-    unit: 'g',
+-    image: getImage('pistachios'),
+-  },
+-  {
+-    id: 'macadamia',
+-    name: 'Macadâmia Crua',
+-    category: 'nuts',
+-    description: 'Macadâmia crua, sabor delicado e textura amanteigada.',
+-    price: 65.00,
+-    unit: 'g',
+-    image: getImage('macadamia'),
+-  },
+-  {
+-    id: 'avelas',
+-    name: 'Avelãs Torradas',
+-    category: 'nuts',
+-    description: 'Avelãs torradas, perfeitas para doces e consumo in natura.',
+-    price: 48.00,
+-    unit: 'g',
+-    image: getImage('hazelnuts'),
+-  },
+-  {
+-    id: 'pinoli',
+-    name: 'Pinoli (Pinhão Europeu)',
+-    category: 'nuts',
+-    description: 'Pinoli, ingrediente essencial para pesto e culinária mediterrânea.',
+-    price: 85.00,
+-    unit: 'g',
+-    image: getImage('pine-nuts'),
+-  },
+-  {
+-    id: 'mix-castanhas',
+-    name: 'Mix de Castanhas Premium',
+-    category: 'nuts',
+-    description: 'Seleção de castanhas (caju, pará, amêndoas, nozes) para um lanche nutritivo.',
+-    price: 39.90,
+-    unit: 'g',
+-    image: getImage('premium-nut-mix'),
+-  },
+-  {
+-    id: 'amendoim-torrado',
+-    name: 'Amendoim Torrado sem Sal',
+-    category: 'nuts',
+-    description: 'Amendoim torrado e sem sal, fonte de energia e proteína.',
+-    price: 12.00,
+-    unit: 'kg',
+-    image: getImage('roasted-peanuts'),
+-  },
+-  {
+-    id: 'semente-abobora',
+-    name: 'Semente de Abóbora Torrada',
+-    category: 'nuts',
+-    description: 'Semente de abóbora torrada, rica em zinco e magnésio.',
+-    price: 25.00,
+-    unit: 'g',
+-    image: getImage('pumpkin-seeds'),
+-  },
+-  {
+-    id: 'castanha-baru',
+-    name: 'Castanha de Baru',
+-    category: 'nuts',
+-    description: 'Castanha de baru, nativa do cerrado, com alto valor nutricional.',
+-    price: 45.00,
+-    unit: 'g',
+-    image: getImage('baru-nuts'),
+-  },
+-  {
+-    id: 'amendoim-japones',
+-    name: 'Amendoim Japonês',
+-    category: 'nuts',
+-    description: 'Amendoim crocante com casquinha de farinha de trigo, saboroso e tradicional.',
+-    price: 15.00,
+-    unit: 'g',
+-    image: getImage('japanese-peanuts'),
+-  },
+-  {
+-    id: 'amendoas-defumadas',
+-    name: 'Amêndoas Defumadas',
+-    category: 'nuts',
+-    description: 'Amêndoas com um toque defumado, para um sabor diferenciado.',
+-    price: 32.00,
+-    unit: 'g',
+-    image: getImage('smoked-almonds'),
+-  },
+-  {
+-    id: 'castanha-caju-w1',
+-    name: 'Castanha de Caju W1 (Inteira)',
+-    category: 'nuts',
+-    description: 'Castanha de caju inteira (W1), a mais nobre e saborosa.',
+-    price: 38.00,
+-    unit: 'g',
+-    image: getImage('cashew-nuts-w1'),
+-  },
+-  {
+-    id: 'nozes-mariposa',
+-    name: 'Nozes Mariposa',
+-    category: 'nuts',
+-    description: 'Metades de nozes mariposa, ideais para confeitaria e decoração.',
+-    price: 40.00,
+-    unit: 'g',
+-    image: getImage('walnut-halves'),
+-  },
++  { id: 'salgado-pastel', name: 'Pastel Chica Preta', category: 'salgados', description: 'Pastel de diferentes sabores', price: 16.00, unit: 'un', image: getImage('snack') },
++  { id: 'salgado-empada-carne', name: 'Empada de Carne de Sol', category: 'salgados', description: 'Com macaxeira', price: 12.90, unit: 'un', image: getImage('snack') },
++  { id: 'salgado-empada-frango', name: 'Empada de Batata Doce com Frango', category: 'salgados', description: 'Massa de batata doce com frango', price: 11.90, unit: 'un', image: getImage('snack') },
++  { id: 'salgado-coxao', name: 'Coxão de Frango', category: 'salgados', description: 'Massa de macaxeira com recheio de frango', price: 14.00, unit: 'un', image: getImage('snack') },
+ 
+-  // Óleos e Manteigas (Adicionais - Total 16)
+-  {
+-    id: 'oleo-abacate',
+-    name: 'Óleo de Abacate Extra Virgem',
+-    category: 'oils',
+-    description: 'Óleo de abacate prensado a frio, rico em gorduras monoinsaturadas, ideal para cocção em alta temperatura.',
+-    price: 55.00,
+-    unit: 'ml',
+-    image: getImage('avocado-oil'),
+-  },
+-  {
+-    id: 'oleo-gergelim',
+-    name: 'Óleo de Gergelim Torrado',
+-    category: 'oils',
+-    description: 'Óleo de gergelim torrado, essencial na culinária asiática, com sabor intenso.',
+-    price: 32.00,
+-    unit: 'ml',
+-    image: getImage('toasted-sesame-oil'),
+-  },
+-  {
+-    id: 'manteiga-amendoa',
+-    name: 'Manteiga de Amêndoa Integral',
+-    category: 'oils',
+-    description: 'Manteiga de amêndoa 100% integral, sem adição de açúcar ou óleos.',
+-    price: 45.00,
+-    unit: 'g',
+-    image: getImage('almond-butter'),
+-  },
+-  {
+-    id: 'oleo-linhaça',
+-    name: 'Óleo de Linhaça Dourada',
+-    category: 'oils',
+-    description: 'Óleo de linhaça prensado a frio, fonte de ômega 3, ideal para consumo cru.',
+-    price: 48.00,
+-    unit: 'ml',
+-    image: getImage('flaxseed-oil'),
+-  },
+-  {
+-    id: 'oleo-girassol',
+-    name: 'Óleo de Girassol Orgânico',
+-    category: 'oils',
+-    description: 'Óleo de girassol orgânico, suave e versátil para o dia a dia.',
+-    price: 25.00,
+-    unit: 'l',
+-    image: getImage('sunflower-oil'),
+-  },
+-  {
+-    id: 'manteiga-castanha-caju',
+-    name: 'Manteiga de Castanha de Caju',
+-    category: 'oils',
+-    description: 'Manteiga cremosa de castanha de caju, deliciosa e nutritiva.',
+-    price: 52.00,
+-    unit: 'g',
+-    image: getImage('cashew-butter'),
+-  },
+-  {
+-    id: 'azeite-trufa',
+-    name: 'Azeite de Oliva com Trufa Branca',
+-    category: 'oils',
+-    description: 'Azeite de oliva extra virgem com infusão de trufa branca, para pratos gourmet.',
+-    price: 75.00,
+-    unit: 'ml',
+-    image: getImage('truffle-oil'),
+-  },
+-  {
+-    id: 'oleo-ricino',
+-    name: 'Óleo de Rícino (Mamona)',
+-    category: 'oils',
+-    description: 'Óleo de rícino puro, para uso cosmético e medicinal.',
+-    price: 18.00,
+-    unit: 'ml',
+-    image: getImage('castor-oil'),
+-  },
+-  {
+-    id: 'oleo-pequi',
+-    name: 'Óleo de Pequi',
+-    category: 'oils',
+-    description: 'Óleo de pequi, sabor marcante, típico da culinária brasileira.',
+-    price: 30.00,
+-    unit: 'ml',
+-    image: getImage('pequi-oil'),
+-  },
+-  {
+-    id: 'manteiga-coco',
+-    name: 'Manteiga de Coco',
+-    category: 'oils',
+-    description: 'Manteiga de coco, alternativa vegana e saudável à manteiga tradicional.',
+-    price: 35.00,
+-    unit: 'g',
+-    image: getImage('coconut-butter'),
+-  },
+-  {
+-    id: 'oleo-alho',
+-    name: 'Óleo de Alho',
+-    category: 'oils',
+-    description: 'Óleo de alho em cápsulas, para saúde cardiovascular e imunidade.',
+-    price: 28.00,
+-    unit: 'un',
+-    image: getImage('garlic-oil-capsules'),
+-  },
+-  {
+-    id: 'oleo-oregano',
+-    name: 'Óleo de Orégano',
+-    category: 'oils',
+-    description: 'Óleo essencial de orégano, potente antifúngico e antibacteriano natural.',
+-    price: 60.00,
+-    unit: 'ml',
+-    image: getImage('oregano-oil'),
+-  },
+-  {
+-    id: 'oleo-palma',
+-    name: 'Óleo de Palma (Dendê)',
+-    category: 'oils',
+-    description: 'Óleo de palma (dendê), essencial na culinária baiana.',
+-    price: 15.00,
+-    unit: 'l',
+-    image: getImage('palm-oil'),
+-  },
++  { id: 'ref-strogonoff', name: 'Strogonoff de Frango', category: 'refeicoes', description: 'Acompanhado de arroz branco e batata inglesa rústica - 320g', price: 28.00, unit: 'un', image: getImage('meal') },
++  { id: 'ref-sobrecoxa-agridoce', name: 'Sobrecoxa Agridoce', category: 'refeicoes', description: 'Acompanhada de arroz com cenoura e ervilha - 250g', price: 25.90, unit: 'un', image: getImage('meal') },
++  { id: 'ref-risoto', name: 'Risoto de Frango', category: 'refeicoes', description: 'Feito com arroz integral, legumes e cubinhos de frango - 350g', price: 25.90, unit: 'un', image: getImage('meal') },
++  { id: 'ref-carne-panela', name: 'Carne de Panela', category: 'refeicoes', description: 'Com arroz, feijão carioca e farofa - 390g', price: 32.50, unit: 'un', image: getImage('meal') },
++  { id: 'ref-escondidinho', name: 'Escondidinho Gratinado', category: 'refeicoes', description: 'Escondidinho gratinado de macaxeira com carne de sol - 400g', price: 25.90, unit: 'un', image: getImage('meal') },
++  { id: 'ref-parmegiana', name: 'Parmegiana de Frango', category: 'refeicoes', description: 'Filé à Parmegiana com espaguete ao molho de tomate - 350g', price: 25.90, unit: 'un', image: getImage('meal') },
++  { id: 'ref-sobrecoxa-laranja', name: 'Sobrecoxa Desossada', category: 'refeicoes', description: 'Ao molho de laranja com purê de batata doce e arroz multigrãos - 350g', price: 25.90, unit: 'un', image: getImage('meal') },
++  { id: 'ref-nhoque', name: 'Nhoque de Manjericão', category: 'refeicoes', description: 'À bolonhesa com queijo - 350g', price: 25.90, unit: 'un', image: getImage('meal') },
++  { id: 'ref-isca', name: 'Isca de Carne Acebolada', category: 'refeicoes', description: 'Com arroz de cenoura e feijão caseiro - 400g', price: 29.90, unit: 'un', image: getImage('meal') },
+ 
+-  // Farinhas e Bases (Adicionais - Total 16)
+-  {
+-    id: 'farinha-trigo-integral',
+-    name: 'Farinha de Trigo Integral Orgânica',
+-    category: 'flours',
+-    description: 'Farinha de trigo integral orgânica, para pães e massas mais nutritivas.',
+-    price: 8.00,
+-    unit: 'kg',
+-    image: getImage('whole-wheat-flour'),
+-  },
+-  {
+-    id: 'polvilho-doce',
+-    name: 'Polvilho Doce',
+-    category: 'flours',
+-    description: 'Polvilho doce, ideal para biscoitos e pães de queijo.',
+-    price: 6.00,
+-    unit: 'kg',
+-    image: getImage('sweet-manioc-starch'),
+-  },
+-  {
+-    id: 'polvilho-azedo',
+-    name: 'Polvilho Azedo',
+-    category: 'flours',
+-    description: 'Polvilho azedo, para dar crocância e acidez em pães de queijo e tapiocas.',
+-    price: 6.50,
+-    unit: 'kg',
+-    image: getImage('sour-manioc-starch'),
+-  },
+-  {
+-    id: 'farinha-mandioca',
+-    name: 'Farinha de Mandioca Torrada',
+-    category: 'flours',
+-    description: 'Farinha de mandioca torrada, essencial para farofas e acompanhamentos.',
+-    price: 5.50,
+-    unit: 'kg',
+-    image: getImage('toasted-manioc-flour'),
+-  },
+-  {
+-    id: 'tapioca',
+-    name: 'Goma de Tapioca Hidratada',
+-    category: 'flours',
+-    description: 'Goma de tapioca hidratada, pronta para o preparo de tapiocas.',
+-    price: 7.50,
+-    unit: 'kg',
+-    image: getImage('tapioca-starch'),
+-  },
+-  {
+-    id: 'farinha-grao-bico',
+-    name: 'Farinha de Grão de Bico',
+-    category: 'flours',
+-    description: 'Farinha de grão de bico, rica em proteínas, para receitas sem glúten.',
+-    price: 18.00,
+-    unit: 'g',
+-    image: getImage('chickpea-flour'),
+-  },
+-  {
+-    id: 'farinha-banana-verde',
+-    name: 'Farinha de Banana Verde',
+-    category: 'flours',
+-    description: 'Farinha de banana verde, fonte de amido resistente, para saúde intestinal.',
+-    price: 15.00,
+-    unit: 'g',
+-    image: getImage('green-banana-flour'),
+-  },
+-  {
+-    id: 'farinha-linhaça',
+-    name: 'Farinha de Linhaça Dourada',
+-    category: 'flours',
+-    description: 'Farinha de linhaça dourada, moída na hora, rica em ômega 3.',
+-    price: 12.00,
+-    unit: 'g',
+-    image: getImage('flaxseed-flour'),
+-  },
+-  {
+-    id: 'farinha-arroz',
+-    name: 'Farinha de Arroz',
+-    category: 'flours',
+-    description: 'Farinha de arroz, alternativa sem glúten para espessar e cozinhar.',
+-    price: 9.00,
+-    unit: 'kg',
+-    image: getImage('rice-flour'),
+-  },
+-  {
+-    id: 'farinha-aveia-sem-gluten',
+-    name: 'Farinha de Aveia Sem Glúten',
+-    category: 'flours',
+-    description: 'Farinha de aveia certificada sem glúten, para celíacos e dietas restritivas.',
+-    price: 16.00,
+-    unit: 'g',
+-    image: getImage('gluten-free-oat-flour'),
+-  },
+-  {
+-    id: 'cacau-po',
+-    name: 'Cacau em Pó 100%',
+-    category: 'flours',
+-    description: 'Cacau em pó puro, sem açúcar, rico em antioxidantes.',
+-    price: 25.00,
+-    unit: 'g',
+-    image: getImage('cocoa-powder'),
+-  },
+-  {
+-    id: 'fermento-biologico',
+-    name: 'Fermento Biológico Seco',
+-    category: 'flours',
+-    description: 'Fermento biológico seco instantâneo, para pães e massas fermentadas.',
+-    price: 4.00,
+-    unit: 'un',
+-    image: getImage('dry-yeast'),
+-  },
+-  {
+-    id: 'acucar-coco',
+-    name: 'Açúcar de Coco Orgânico',
+-    category: 'flours',
+-    description: 'Açúcar de coco orgânico, com baixo índice glicêmico, alternativa saudável ao açúcar refinado.',
+-    price: 19.00,
+-    unit: 'g',
+-    image: getImage('coconut-sugar'),
+-  },
+-  {
+-    id: 'sal-rosa',
+-    name: 'Sal Rosa do Himalaia Fino',
+-    category: 'flours',
+-    description: 'Sal rosa do Himalaia fino, rico em minerais e com sabor suave.',
+-    price: 12.00,
+-    unit: 'kg',
+-    image: getImage('pink-himalayan-salt'),
+-  },
+-  {
+-    id: 'xilitol',
+-    name: 'Xilitol Adoçante Natural',
+-    category: 'flours',
+-    description: 'Xilitol, adoçante natural com baixo teor calórico.',
+-    price: 28.00,
+-    unit: 'g',
+-    image: getImage('xylitol'),
+-  },
+-  {
+-    id: 'eritritol',
+-    name: 'Eritritol Adoçante Natural',
+-    category: 'flours',
+-    description: 'Eritritol, adoçante natural sem calorias, ideal para dietas low-carb.',
+-    price: 32.00,
+-    unit: 'g',
+-    image: getImage('erythritol'),
+-  },
++  { id: 'beb-sopa', name: 'Sopa Canja de Galinha', category: 'bebidas', description: 'Com legumes - 450g', price: 24.90, unit: 'un', image: getImage('meal') },
++  { id: 'beb-monster', name: 'Monster Energy 473ml', category: 'bebidas', description: 'Energético', price: 14.00, unit: 'un', image: getImage('bottle') },
++  { id: 'beb-redbull', name: 'Red Bull 250ml', category: 'bebidas', description: 'Energético', price: 12.00, unit: 'un', image: getImage('bottle') },
++  { id: 'beb-cocazero', name: 'Coca Cola Zero 350ml', category: 'bebidas', description: 'Refrigerante', price: 6.00, unit: 'un', image: getImage('bottle') },
++  { id: 'beb-yopro', name: 'YoPro 250ml', category: 'bebidas', description: 'Bebida láctea proteica', price: 12.00, unit: 'un', image: getImage('bottle') },
++  { id: 'beb-powerade', name: 'Powerade 500ml', category: 'bebidas', description: 'Isotônico', price: 12.00, unit: 'un', image: getImage('bottle') },
++  { id: 'beb-plant', name: 'Plant Power Jungle 500ml', category: 'bebidas', description: 'Energético natural', price: 12.50, unit: 'un', image: getImage('bottle') },
++  { id: 'beb-awe', name: 'Awe Energy 355ml', category: 'bebidas', description: 'Energético', price: 18.99, unit: 'un', image: getImage('bottle') },
++  { id: 'beb-pre200', name: 'Dose de Pré-Treino 200mg', category: 'bebidas', description: '200mg de cafeína', price: 6.00, unit: 'un', image: getImage('bottle') },
++  { id: 'beb-pre400', name: 'Dose de Pré-Treino 400mg', category: 'bebidas', description: '400mg de cafeína', price: 7.50, unit: 'un', image: getImage('bottle') },
++  { id: 'beb-aguasemgas', name: 'Água sem Gás 500ml', category: 'bebidas', description: 'Água mineral', price: 4.00, unit: 'un', image: getImage('bottle') },
++  { id: 'beb-aguacomgas', name: 'Água com Gás 500ml', category: 'bebidas', description: 'Água mineral gaseificada', price: 5.00, unit: 'un', image: getImage('bottle') },
++  { id: 'beb-h2o', name: 'H2O Limoneto 500ml', category: 'bebidas', description: 'Refrigerante de limão', price: 8.00, unit: 'un', image: getImage('bottle') },
++  { id: 'beb-cappuccino', name: 'Cappuccino Power Whey', category: 'bebidas', description: '3 Corações 15g de Proteína (260ml)', price: 12.00, unit: 'un', image: getImage('bottle') }
+ ];
+ 
+-export const WHATSAPP_NUMBER = '5583987722871';
++export const WHATSAPP_NUMBER = '5583987722871';
+\ No newline at end of file
+diff --git a/update-catalog.js b/update-catalog.js
+new file mode 100644
+index 0000000..0a4d413
+--- /dev/null
++++ b/update-catalog.js
+@@ -0,0 +1,31 @@
++const fs = require('fs');
++const file = '/home/node/.openclaw/workspace/greenlyfe-site/src/components/product-catalog.tsx';
++let content = fs.readFileSync(file, 'utf8');
++
++// replace icons import
++content = content.replace(/import { Wheat, Pill, GlassWater, Search, X, Grid3x3, List } from 'lucide-react';/g, "import { CupSoda, BatteryCharging, Coffee, Apple, Pizza, Utensils, Wine, GlassWater, Search, X, Grid3x3, List } from 'lucide-react';");
++
++// replace categories array
++const newCategories = `const categories = [
++  { value: 'sucos-naturais', label: 'Sucos Naturais', icon: GlassWater },
++  { value: 'sucos-funcionais', label: 'Funcionais', icon: CupSoda },
++  { value: 'vitaminas-energeticos', label: 'Vitaminas', icon: BatteryCharging },
++  { value: 'shakes-proteicos', label: 'Shakes', icon: Coffee },
++  { value: 'acai', label: 'Açaí', icon: Apple },
++  { value: 'salgados', label: 'Salgados', icon: Pizza },
++  { value: 'refeicoes', label: 'Refeições', icon: Utensils },
++  { value: 'bebidas', label: 'Bebidas', icon: Wine },
++];`;
++content = content.replace(/const categories = \[[\s\S]*?\];/, newCategories);
++
++// change default selected category
++content = content.replace(/useState\('grains'\)/, "useState('sucos-naturais')");
++
++// change TabsList grid classes
++content = content.replace(/className="grid w-full grid-cols-3 mb-8"/, 'className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-8 mb-8 h-auto"');
++
++// Fix TabsTrigger styling so it wraps correctly
++content = content.replace(/className="flex gap-2 items-center"/, 'className="flex flex-col md:flex-row gap-2 items-center py-2 h-auto"');
++
++fs.writeFileSync(file, content);
++console.log('done');
+-- 
+2.39.5
+
+From a699236e9fb8d3291edc16d92cb22885442ef2bc Mon Sep 17 00:00:00 2001
+From: "Chaves (OpenClaw)" <chaves@openclaw.ai>
+Date: Tue, 1 Sep 2026 20:30:31 +0000
+Subject: [PATCH 2/2] Atualiza dependencias do Next para versao mais recente
+
+---
+ package-lock.json | 586 +++++++++++++++++++++++++++-------------------
+ package.json      |   2 +-
+ 2 files changed, 343 insertions(+), 245 deletions(-)
+
+diff --git a/package-lock.json b/package-lock.json
+index 5735ecc..e8b8932 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -40,7 +40,7 @@
+         "firebase": "^11.9.1",
+         "genkit": "^1.20.0",
+         "lucide-react": "^0.475.0",
+-        "next": "15.3.3",
++        "next": "^16.3.4",
+         "patch-package": "^8.0.0",
+         "react": "^18.3.1",
+         "react-day-picker": "^8.10.1",
+@@ -119,9 +119,10 @@
+       }
+     },
+     "node_modules/@emnapi/runtime": {
+-      "version": "1.4.3",
+-      "resolved": "https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.4.3.tgz",
+-      "integrity": "sha512-pBPWdu6MLKROBX05wSNKcNb++m5Er+KQ9QkB+WVM+pW2Kx9hoSrVTnu3BdkI5eBLZoKu/J6mW/B6i6bJB2ytXQ==",
++      "version": "1.11.3",
++      "resolved": "https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.11.3.tgz",
++      "integrity": "sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA==",
++      "license": "MIT",
+       "optional": true,
+       "dependencies": {
+         "tslib": "^2.4.0"
+@@ -1735,55 +1736,87 @@
+         "react-hook-form": "^7.0.0"
+       }
+     },
++    "node_modules/@img/colour": {
++      "version": "1.1.0",
++      "resolved": "https://registry.npmjs.org/@img/colour/-/colour-1.1.0.tgz",
++      "integrity": "sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==",
++      "license": "MIT",
++      "optional": true,
++      "engines": {
++        "node": ">=18"
++      }
++    },
+     "node_modules/@img/sharp-darwin-arm64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-darwin-arm64/-/sharp-darwin-arm64-0.34.2.tgz",
+-      "integrity": "sha512-OfXHZPppddivUJnqyKoi5YVeHRkkNE2zUFT2gbpKxp/JZCFYEYubnMg+gOp6lWfasPrTS+KPosKqdI+ELYVDtg==",
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-darwin-arm64/-/sharp-darwin-arm64-0.35.4.tgz",
++      "integrity": "sha512-Uhfl4V4lhP2nbUVF9+hyH1+luj86f1gUFeo8ALYxFoULoU+G87D43BfeMP8XHsk9boxAnCY/bf2EHwhA7MuGsA==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "darwin"
+       ],
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": ">=20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-darwin-arm64": "1.1.0"
++        "@img/sharp-libvips-darwin-arm64": "1.3.3"
+       }
+     },
+     "node_modules/@img/sharp-darwin-x64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-darwin-x64/-/sharp-darwin-x64-0.34.2.tgz",
+-      "integrity": "sha512-dYvWqmjU9VxqXmjEtjmvHnGqF8GrVjM2Epj9rJ6BUIXvk8slvNDJbhGFvIoXzkDhrJC2jUxNLz/GUjjvSzfw+g==",
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-darwin-x64/-/sharp-darwin-x64-0.35.4.tgz",
++      "integrity": "sha512-hWniXY3bG5qKpkKrAwPe4y+VTPmf086YQAnkxWh7uA1YrlRouWGa0M0Mxj3ZjnXFkv7/TD1bTy9lGUK26vRvWw==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "darwin"
+       ],
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": ">=20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-darwin-x64": "1.1.0"
++        "@img/sharp-libvips-darwin-x64": "1.3.3"
++      }
++    },
++    "node_modules/@img/sharp-freebsd-wasm32": {
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-freebsd-wasm32/-/sharp-freebsd-wasm32-0.35.4.tgz",
++      "integrity": "sha512-lIsKw/BU+kjB4eZjxrYrZmwOJYi3Ajrv66iAlBmUPyKc3HpnloevB1g3wxGD9P/5BbQ1brBGl65VRRrCvQDEqA==",
++      "license": "Apache-2.0",
++      "optional": true,
++      "os": [
++        "freebsd"
++      ],
++      "dependencies": {
++        "@img/sharp-wasm32": "0.35.4"
++      },
++      "engines": {
++        "node": ">=20.9.0"
++      },
++      "funding": {
++        "url": "https://opencollective.com/libvips"
+       }
+     },
+     "node_modules/@img/sharp-libvips-darwin-arm64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-darwin-arm64/-/sharp-libvips-darwin-arm64-1.1.0.tgz",
+-      "integrity": "sha512-HZ/JUmPwrJSoM4DIQPv/BfNh9yrOA8tlBbqbLz4JZ5uew2+o22Ik+tHQJcih7QJuSa0zo5coHTfD5J8inqj9DA==",
++      "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-darwin-arm64/-/sharp-libvips-darwin-arm64-1.3.3.tgz",
++      "integrity": "sha512-suTBPTDGrI9WodccaDdwZItTSaBYASlBk1NSfElSHrUfzu3szG6lvIF58+WiFvnfzuK8ZBFS5zE00PxqxnRiPg==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "darwin"
+@@ -1793,12 +1826,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-darwin-x64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-darwin-x64/-/sharp-libvips-darwin-x64-1.1.0.tgz",
+-      "integrity": "sha512-Xzc2ToEmHN+hfvsl9wja0RlnXEgpKNmftriQp6XzY/RaSfwD9th+MSh0WQKzUreLKKINb3afirxW7A0fz2YWuQ==",
++      "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-darwin-x64/-/sharp-libvips-darwin-x64-1.3.3.tgz",
++      "integrity": "sha512-FVJZ5mITMobmXIz/hPDTw0EintTW5H3WfrxwLqEqjiIihlu+hVRyGrFQ60xl0Lxn7Bt3zdpevPaQi0HEzqz9fw==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "darwin"
+@@ -1808,12 +1842,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linux-arm": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-arm/-/sharp-libvips-linux-arm-1.1.0.tgz",
+-      "integrity": "sha512-s8BAd0lwUIvYCJyRdFqvsj+BJIpDBSxs6ivrOPm/R7piTs5UIwY5OjXrP2bqXC9/moGsyRa37eYWYCOGVXxVrA==",
++      "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-arm/-/sharp-libvips-linux-arm-1.3.3.tgz",
++      "integrity": "sha512-3rbU4vqXXc3hY/OiXdl52xZvT0F1yEngWfvqudtPJg/KkyiaQw2DRsFrNzpmLvfavbwOq3qXn36GP8obHRULQA==",
+       "cpu": [
+         "arm"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -1823,12 +1858,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linux-arm64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-arm64/-/sharp-libvips-linux-arm64-1.1.0.tgz",
+-      "integrity": "sha512-IVfGJa7gjChDET1dK9SekxFFdflarnUB8PwW8aGwEoF3oAsSDuNUTYS+SKDOyOJxQyDC1aPFMuRYLoDInyV9Ew==",
++      "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-arm64/-/sharp-libvips-linux-arm64-1.3.3.tgz",
++      "integrity": "sha512-0DaL0A6Xu6sQSQFwe4iVCrKWU2cCTItnRsYsCdxAMm9NF6twAA9BKnoqy4hqz4+azQ0JHuA26qiUKsf1XJ/v5A==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -1838,12 +1874,29 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linux-ppc64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-ppc64/-/sharp-libvips-linux-ppc64-1.1.0.tgz",
+-      "integrity": "sha512-tiXxFZFbhnkWE2LA8oQj7KYR+bWBkiV2nilRldT7bqoEZ4HiDOcePr9wVDAZPi/Id5fT1oY9iGnDq20cwUz8lQ==",
++      "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-ppc64/-/sharp-libvips-linux-ppc64-1.3.3.tgz",
++      "integrity": "sha512-cdn1OvUBwsXhbC0zSzJnNzf5MZ/mTrobawDvNXBTxe8VtqKAm0sRuEY2Evzovb/w9JMk4TvRxqt1mekSuJz64w==",
+       "cpu": [
+         "ppc64"
+       ],
++      "license": "LGPL-3.0-or-later",
++      "optional": true,
++      "os": [
++        "linux"
++      ],
++      "funding": {
++        "url": "https://opencollective.com/libvips"
++      }
++    },
++    "node_modules/@img/sharp-libvips-linux-riscv64": {
++      "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-riscv64/-/sharp-libvips-linux-riscv64-1.3.3.tgz",
++      "integrity": "sha512-HjPVx7yKz+0lqdhDlTw1tt90wamBoxhiXpvl1XZpJLiHH4RCJ5yDTqH+VlYPv2fwFs89JFw4c1IexYOcQUi4IQ==",
++      "cpu": [
++        "riscv64"
++      ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -1853,12 +1906,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linux-s390x": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-s390x/-/sharp-libvips-linux-s390x-1.1.0.tgz",
+-      "integrity": "sha512-xukSwvhguw7COyzvmjydRb3x/09+21HykyapcZchiCUkTThEQEOMtBj9UhkaBRLuBrgLFzQ2wbxdeCCJW/jgJA==",
++      "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-s390x/-/sharp-libvips-linux-s390x-1.3.3.tgz",
++      "integrity": "sha512-neWLh+3yCNThxnfy3c4BbVBeGgt9aftno+XbT56iK28RgeDs3UOFWviLWlUu0bArYVYJaFDK+RRohbicUNCm8Q==",
+       "cpu": [
+         "s390x"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -1868,12 +1922,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linux-x64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-x64/-/sharp-libvips-linux-x64-1.1.0.tgz",
+-      "integrity": "sha512-yRj2+reB8iMg9W5sULM3S74jVS7zqSzHG3Ol/twnAAkAhnGQnpjj6e4ayUz7V+FpKypwgs82xbRdYtchTTUB+Q==",
++      "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linux-x64/-/sharp-libvips-linux-x64-1.3.3.tgz",
++      "integrity": "sha512-4vKmvAst9nrowcqquKFAyZJUDolUaIp8uRiN0mWFguJ1IplC9/pitXtlnnlU4aa/eJw3J7i67V+pwUL+wZGdsA==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -1883,12 +1938,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linuxmusl-arm64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-arm64/-/sharp-libvips-linuxmusl-arm64-1.1.0.tgz",
+-      "integrity": "sha512-jYZdG+whg0MDK+q2COKbYidaqW/WTz0cc1E+tMAusiDygrM4ypmSCjOJPmFTvHHJ8j/6cAGyeDWZOsK06tP33w==",
++      "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-arm64/-/sharp-libvips-linuxmusl-arm64-1.3.3.tgz",
++      "integrity": "sha512-Y9kQaLMuNoB0bPYOOdcZMaseNrFpPodIWWMrx+CZyydf2xn68j9WYc6sWWRrDwNkzCQjKYfc68L7jKjGlHMibw==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -1898,12 +1954,13 @@
+       }
+     },
+     "node_modules/@img/sharp-libvips-linuxmusl-x64": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-x64/-/sharp-libvips-linuxmusl-x64-1.1.0.tgz",
+-      "integrity": "sha512-wK7SBdwrAiycjXdkPnGCPLjYb9lD4l6Ze2gSdAGVZrEL05AOUJESWU2lhlC+Ffn5/G+VKuSm6zzbQSzFX/P65A==",
++      "version": "1.3.3",
++      "resolved": "https://registry.npmjs.org/@img/sharp-libvips-linuxmusl-x64/-/sharp-libvips-linuxmusl-x64-1.3.3.tgz",
++      "integrity": "sha512-fj8Mv0HHfD1Rr+4I68+3agJynxDWtBFgicTbSOb9Bke6pIwzGcJ+RX/yHjmiEGFMCavY/dxvem7MyNaJF+wDiw==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -1913,198 +1970,268 @@
+       }
+     },
+     "node_modules/@img/sharp-linux-arm": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-linux-arm/-/sharp-linux-arm-0.34.2.tgz",
+-      "integrity": "sha512-0DZzkvuEOqQUP9mo2kjjKNok5AmnOr1jB2XYjkaoNRwpAYMDzRmAqUIa1nRi58S2WswqSfPOWLNOr0FDT3H5RQ==",
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linux-arm/-/sharp-linux-arm-0.35.4.tgz",
++      "integrity": "sha512-7OAS8gI0EReKGVN2HssHlM6umJgxF5VI3xN0p9FA91p/YO+ou5hiNghLdZ5BEHztwaaK5+bLKRf8x/o2L2nk9A==",
+       "cpu": [
+         "arm"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "linux"
+       ],
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": ">=20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-linux-arm": "1.1.0"
++        "@img/sharp-libvips-linux-arm": "1.3.3"
+       }
+     },
+     "node_modules/@img/sharp-linux-arm64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-linux-arm64/-/sharp-linux-arm64-0.34.2.tgz",
+-      "integrity": "sha512-D8n8wgWmPDakc83LORcfJepdOSN6MvWNzzz2ux0MnIbOqdieRZwVYY32zxVx+IFUT8er5KPcyU3XXsn+GzG/0Q==",
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linux-arm64/-/sharp-linux-arm64-0.35.4.tgz",
++      "integrity": "sha512-De4jpEnAU8Hd5oT0j1G3uL4ZvTuipVMn7YC6vPaJhy6/7EwEae0SVAoBrUMYQbkLGDm85taVWwuPc1a44LTzCQ==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "Apache-2.0",
++      "optional": true,
++      "os": [
++        "linux"
++      ],
++      "engines": {
++        "node": ">=20.9.0"
++      },
++      "funding": {
++        "url": "https://opencollective.com/libvips"
++      },
++      "optionalDependencies": {
++        "@img/sharp-libvips-linux-arm64": "1.3.3"
++      }
++    },
++    "node_modules/@img/sharp-linux-ppc64": {
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linux-ppc64/-/sharp-linux-ppc64-0.35.4.tgz",
++      "integrity": "sha512-2oYZJeIl4kCcMGk4ouZVjnkCtFrpQFlNEtJ6GbxzhHQchwH0NH/qEb9ykmOl29dqwMq+JhFdZn+1ak2FKhI9fQ==",
++      "cpu": [
++        "ppc64"
++      ],
++      "license": "Apache-2.0",
++      "optional": true,
++      "os": [
++        "linux"
++      ],
++      "engines": {
++        "node": ">=20.9.0"
++      },
++      "funding": {
++        "url": "https://opencollective.com/libvips"
++      },
++      "optionalDependencies": {
++        "@img/sharp-libvips-linux-ppc64": "1.3.3"
++      }
++    },
++    "node_modules/@img/sharp-linux-riscv64": {
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linux-riscv64/-/sharp-linux-riscv64-0.35.4.tgz",
++      "integrity": "sha512-cPbNChoRURAWdebDIHSenxRpgEdy7JkPydSnUxRm9VvKD7m0/xVaR/8Fzlu81pk5nHEvHH87UZUA7cTtwnbJSA==",
++      "cpu": [
++        "riscv64"
++      ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "linux"
+       ],
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": ">=20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-linux-arm64": "1.1.0"
++        "@img/sharp-libvips-linux-riscv64": "1.3.3"
+       }
+     },
+     "node_modules/@img/sharp-linux-s390x": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-linux-s390x/-/sharp-linux-s390x-0.34.2.tgz",
+-      "integrity": "sha512-EGZ1xwhBI7dNISwxjChqBGELCWMGDvmxZXKjQRuqMrakhO8QoMgqCrdjnAqJq/CScxfRn+Bb7suXBElKQpPDiw==",
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linux-s390x/-/sharp-linux-s390x-0.35.4.tgz",
++      "integrity": "sha512-RY0JFY8Fd6RonCBtHz+DvadaPkXDSI1AUn6yWL9TipqkZ1vY8w8evqdgyDFnkm4/K1ve1TvZiaePP5oSd4+WVQ==",
+       "cpu": [
+         "s390x"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "linux"
+       ],
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": ">=20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-linux-s390x": "1.1.0"
++        "@img/sharp-libvips-linux-s390x": "1.3.3"
+       }
+     },
+     "node_modules/@img/sharp-linux-x64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-linux-x64/-/sharp-linux-x64-0.34.2.tgz",
+-      "integrity": "sha512-sD7J+h5nFLMMmOXYH4DD9UtSNBD05tWSSdWAcEyzqW8Cn5UxXvsHAxmxSesYUsTOBmUnjtxghKDl15EvfqLFbQ==",
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linux-x64/-/sharp-linux-x64-0.35.4.tgz",
++      "integrity": "sha512-9qvvEAuk8k89TfWUoX2htWjbAMX8p+NxCppjpcg5k6xMsjhBQPTsoIh36h9Qde4WRuGpJeYnOjdosDn/cnv+OA==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "linux"
+       ],
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": ">=20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-linux-x64": "1.1.0"
++        "@img/sharp-libvips-linux-x64": "1.3.3"
+       }
+     },
+     "node_modules/@img/sharp-linuxmusl-arm64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-linuxmusl-arm64/-/sharp-linuxmusl-arm64-0.34.2.tgz",
+-      "integrity": "sha512-NEE2vQ6wcxYav1/A22OOxoSOGiKnNmDzCYFOZ949xFmrWZOVII1Bp3NqVVpvj+3UeHMFyN5eP/V5hzViQ5CZNA==",
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linuxmusl-arm64/-/sharp-linuxmusl-arm64-0.35.4.tgz",
++      "integrity": "sha512-KB5jxpfWQTr0nc3xdHtWChdbifHrBGsd2SM62Eyxrl8afikm+f5qGBU75SJIZBT/S1MC8XyacdlXBMSWq6OURA==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "linux"
+       ],
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": ">=20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-linuxmusl-arm64": "1.1.0"
++        "@img/sharp-libvips-linuxmusl-arm64": "1.3.3"
+       }
+     },
+     "node_modules/@img/sharp-linuxmusl-x64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-linuxmusl-x64/-/sharp-linuxmusl-x64-0.34.2.tgz",
+-      "integrity": "sha512-DOYMrDm5E6/8bm/yQLCWyuDJwUnlevR8xtF8bs+gjZ7cyUNYXiSf/E8Kp0Ss5xasIaXSHzb888V1BE4i1hFhAA==",
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-linuxmusl-x64/-/sharp-linuxmusl-x64-0.35.4.tgz",
++      "integrity": "sha512-f+eZJZIQNEEd26RPSW+76chwOf1XtA2Y/O+5ocVyLliHkeih3e+jhLVBdNTd2rS3IbNXK8+ug93Vf5ZXtF5Lxg==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "os": [
+         "linux"
+       ],
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": ">=20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-libvips-linuxmusl-x64": "1.1.0"
++        "@img/sharp-libvips-linuxmusl-x64": "1.3.3"
+       }
+     },
+     "node_modules/@img/sharp-wasm32": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-wasm32/-/sharp-wasm32-0.34.2.tgz",
+-      "integrity": "sha512-/VI4mdlJ9zkaq53MbIG6rZY+QRN3MLbR6usYlgITEzi4Rpx5S6LFKsycOQjkOGmqTNmkIdLjEvooFKwww6OpdQ==",
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-wasm32/-/sharp-wasm32-0.35.4.tgz",
++      "integrity": "sha512-zQnl4Kwp7Q6NHsENtU2T/00Zi+w3AQNwz3+UaTyVBy2FpXrzXzGjndpK61onhZjRtRpQXxCTeqw19bVyXOh7jA==",
++      "license": "Apache-2.0 AND LGPL-3.0-or-later AND MIT",
++      "optional": true,
++      "dependencies": {
++        "@emnapi/runtime": "^1.11.3"
++      },
++      "engines": {
++        "node": ">=20.9.0"
++      },
++      "funding": {
++        "url": "https://opencollective.com/libvips"
++      }
++    },
++    "node_modules/@img/sharp-webcontainers-wasm32": {
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-webcontainers-wasm32/-/sharp-webcontainers-wasm32-0.35.4.tgz",
++      "integrity": "sha512-ESfNkywmCfPNyaZjxooddJQiQ+l/nTpGEOGthxiLnIHXC/CmcBixnfwUleX9mCz9ovrUUvKMap/pm8RYbzfwaA==",
+       "cpu": [
+         "wasm32"
+       ],
++      "license": "Apache-2.0",
+       "optional": true,
+       "dependencies": {
+-        "@emnapi/runtime": "^1.4.3"
++        "@img/sharp-wasm32": "0.35.4"
+       },
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": ">=20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+       }
+     },
+     "node_modules/@img/sharp-win32-arm64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-win32-arm64/-/sharp-win32-arm64-0.34.2.tgz",
+-      "integrity": "sha512-cfP/r9FdS63VA5k0xiqaNaEoGxBg9k7uE+RQGzuK9fHt7jib4zAVVseR9LsE4gJcNWgT6APKMNnCcnyOtmSEUQ==",
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-win32-arm64/-/sharp-win32-arm64-0.35.4.tgz",
++      "integrity": "sha512-iNdlBX9gLVvqe2I3uIJSIKTq6wckP/DYxZtcqxm09x5Gi24DnFBmPAWZmr60ZyYMG0xlzo6goG3670ar+RXvRw==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "Apache-2.0 AND LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "win32"
+       ],
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": ">=20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+       }
+     },
+     "node_modules/@img/sharp-win32-ia32": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-win32-ia32/-/sharp-win32-ia32-0.34.2.tgz",
+-      "integrity": "sha512-QLjGGvAbj0X/FXl8n1WbtQ6iVBpWU7JO94u/P2M4a8CFYsvQi4GW2mRy/JqkRx0qpBzaOdKJKw8uc930EX2AHw==",
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-win32-ia32/-/sharp-win32-ia32-0.35.4.tgz",
++      "integrity": "sha512-kqRsbaa5CS6KHlpxnN7WhE6vAAugXyZButpRdvDWetlv6Qv4N9WTcrWzF7tXfB9T7MsoadqdI8hmwLq6UlLvtw==",
+       "cpu": [
+         "ia32"
+       ],
++      "license": "Apache-2.0 AND LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "win32"
+       ],
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": "^20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+       }
+     },
+     "node_modules/@img/sharp-win32-x64": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/@img/sharp-win32-x64/-/sharp-win32-x64-0.34.2.tgz",
+-      "integrity": "sha512-aUdT6zEYtDKCaxkofmmJDJYGCf0+pJg3eU9/oBuqvEeoB9dKI6ZLc/1iLJCTuJQDO4ptntAlkUmHgGjyuobZbw==",
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/@img/sharp-win32-x64/-/sharp-win32-x64-0.35.4.tgz",
++      "integrity": "sha512-XtmnYhBcrORsJ4XJngyzr/EWP0hRZLAZRFaApdKuviyqF78+ylxh2y06ZmtULAMOnObJ3ucpN0AcwSWnMowTRg==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "Apache-2.0 AND LGPL-3.0-or-later",
+       "optional": true,
+       "os": [
+         "win32"
+       ],
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": ">=20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+@@ -2997,17 +3124,19 @@
+       }
+     },
+     "node_modules/@next/env": {
+-      "version": "15.3.3",
+-      "resolved": "https://registry.npmjs.org/@next/env/-/env-15.3.3.tgz",
+-      "integrity": "sha512-OdiMrzCl2Xi0VTjiQQUK0Xh7bJHnOuET2s+3V+Y40WJBAXrJeGA3f+I8MZJ/YQ3mVGi5XGR1L66oFlgqXhQ4Vw=="
++      "version": "16.3.4",
++      "resolved": "https://registry.npmjs.org/@next/env/-/env-16.3.4.tgz",
++      "integrity": "sha512-cjWZnUUa6jZq2kFaNe/ZyJdZonOZ/QoN0Zka2nz/FLOrfx14pQuM9c5RaSVkWMqgdt4ksgPAMWPyHSs/CyV48Q==",
++      "license": "MIT"
+     },
+     "node_modules/@next/swc-darwin-arm64": {
+-      "version": "15.3.3",
+-      "resolved": "https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-15.3.3.tgz",
+-      "integrity": "sha512-WRJERLuH+O3oYB4yZNVahSVFmtxRNjNF1I1c34tYMoJb0Pve+7/RaLAJJizyYiFhjYNGHRAE1Ri2Fd23zgDqhg==",
++      "version": "16.3.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-darwin-arm64/-/swc-darwin-arm64-16.3.4.tgz",
++      "integrity": "sha512-iBr3I5LZNk5/bgl5//iTgD2tcym14MX0Xo7fD//u9dYAEgGzza1y9oywluPtf74YnOswVdH1908aK9xVz7zQTw==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "darwin"
+@@ -3017,12 +3146,13 @@
+       }
+     },
+     "node_modules/@next/swc-darwin-x64": {
+-      "version": "15.3.3",
+-      "resolved": "https://registry.npmjs.org/@next/swc-darwin-x64/-/swc-darwin-x64-15.3.3.tgz",
+-      "integrity": "sha512-XHdzH/yBc55lu78k/XwtuFR/ZXUTcflpRXcsu0nKmF45U96jt1tsOZhVrn5YH+paw66zOANpOnFQ9i6/j+UYvw==",
++      "version": "16.3.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-darwin-x64/-/swc-darwin-x64-16.3.4.tgz",
++      "integrity": "sha512-2dpiSyl2Jw/NrBPaU2MAKGSa+2MR82pJIn4Sm5Rjr+gxAeuh0z158Su3Z2O8zn7UNNq+ej4bToed6RcRN/Lydg==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "darwin"
+@@ -3032,12 +3162,13 @@
+       }
+     },
+     "node_modules/@next/swc-linux-arm64-gnu": {
+-      "version": "15.3.3",
+-      "resolved": "https://registry.npmjs.org/@next/swc-linux-arm64-gnu/-/swc-linux-arm64-gnu-15.3.3.tgz",
+-      "integrity": "sha512-VZ3sYL2LXB8znNGcjhocikEkag/8xiLgnvQts41tq6i+wql63SMS1Q6N8RVXHw5pEUjiof+II3HkDd7GFcgkzw==",
++      "version": "16.3.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-linux-arm64-gnu/-/swc-linux-arm64-gnu-16.3.4.tgz",
++      "integrity": "sha512-+t+U8HZT+fApePCS5h89CSH3datz29MkzyfCn+6fpsZBG/oiEOhINcb9rtkv6sdpToLGFn2e6146NzaKCXkqrA==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -3047,12 +3178,13 @@
+       }
+     },
+     "node_modules/@next/swc-linux-arm64-musl": {
+-      "version": "15.3.3",
+-      "resolved": "https://registry.npmjs.org/@next/swc-linux-arm64-musl/-/swc-linux-arm64-musl-15.3.3.tgz",
+-      "integrity": "sha512-h6Y1fLU4RWAp1HPNJWDYBQ+e3G7sLckyBXhmH9ajn8l/RSMnhbuPBV/fXmy3muMcVwoJdHL+UtzRzs0nXOf9SA==",
++      "version": "16.3.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-linux-arm64-musl/-/swc-linux-arm64-musl-16.3.4.tgz",
++      "integrity": "sha512-mx03GNs1ocQA5JQ4FxDMmIsNkdrZh8cuezKCrId28e5/gIPU/l7Kcy2+vmCCzdjnnmXJy+iOAu+7K0QppO6Urg==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -3062,12 +3194,13 @@
+       }
+     },
+     "node_modules/@next/swc-linux-x64-gnu": {
+-      "version": "15.3.3",
+-      "resolved": "https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-15.3.3.tgz",
+-      "integrity": "sha512-jJ8HRiF3N8Zw6hGlytCj5BiHyG/K+fnTKVDEKvUCyiQ/0r5tgwO7OgaRiOjjRoIx2vwLR+Rz8hQoPrnmFbJdfw==",
++      "version": "16.3.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-16.3.4.tgz",
++      "integrity": "sha512-YIhGY6fSMfha52bnVxnzc9zaVBzJg+cqQTOD8tXIBSx4fuv0pVMxQTE0PaS59YhnMOiYiG09IMwxJAf/CFm/Dw==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -3077,12 +3210,13 @@
+       }
+     },
+     "node_modules/@next/swc-linux-x64-musl": {
+-      "version": "15.3.3",
+-      "resolved": "https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-15.3.3.tgz",
+-      "integrity": "sha512-HrUcTr4N+RgiiGn3jjeT6Oo208UT/7BuTr7K0mdKRBtTbT4v9zJqCDKO97DUqqoBK1qyzP1RwvrWTvU6EPh/Cw==",
++      "version": "16.3.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-16.3.4.tgz",
++      "integrity": "sha512-+eaaX6axpDb0yF1GCpiERe6njplvdC+nks/fKfcHu3XPGRrald8P3/X7yv7QLdjA51knnxwl9pxdIJsg+w1L+Q==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "linux"
+@@ -3092,12 +3226,13 @@
+       }
+     },
+     "node_modules/@next/swc-win32-arm64-msvc": {
+-      "version": "15.3.3",
+-      "resolved": "https://registry.npmjs.org/@next/swc-win32-arm64-msvc/-/swc-win32-arm64-msvc-15.3.3.tgz",
+-      "integrity": "sha512-SxorONgi6K7ZUysMtRF3mIeHC5aA3IQLmKFQzU0OuhuUYwpOBc1ypaLJLP5Bf3M9k53KUUUj4vTPwzGvl/NwlQ==",
++      "version": "16.3.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-win32-arm64-msvc/-/swc-win32-arm64-msvc-16.3.4.tgz",
++      "integrity": "sha512-0jcXW7Xs/uzICrmgV3MhDYDeRy++1CqnpDIerlPIqYO4bhzB4WNbX/aRnQclustsAyTkFKB0z6rbcjmNg5tR8A==",
+       "cpu": [
+         "arm64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "win32"
+@@ -3107,12 +3242,13 @@
+       }
+     },
+     "node_modules/@next/swc-win32-x64-msvc": {
+-      "version": "15.3.3",
+-      "resolved": "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-15.3.3.tgz",
+-      "integrity": "sha512-4QZG6F8enl9/S2+yIiOiju0iCTFd93d8VC1q9LZS4p/Xuk81W2QDjCFeoogmrWWkAD59z8ZxepBQap2dKS5ruw==",
++      "version": "16.3.4",
++      "resolved": "https://registry.npmjs.org/@next/swc-win32-x64-msvc/-/swc-win32-x64-msvc-16.3.4.tgz",
++      "integrity": "sha512-vvBzwu1pYQCp92maZCFCIw/XgOTMR5tur9GjakwIo2cmwRTMKajRZZDS9+e4KsUZWKu1E007WUeAFXRRjZeuzw==",
+       "cpu": [
+         "x64"
+       ],
++      "license": "MIT",
+       "optional": true,
+       "os": [
+         "win32"
+@@ -6092,15 +6228,11 @@
+       "resolved": "https://registry.npmjs.org/@standard-schema/utils/-/utils-0.3.0.tgz",
+       "integrity": "sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g=="
+     },
+-    "node_modules/@swc/counter": {
+-      "version": "0.1.3",
+-      "resolved": "https://registry.npmjs.org/@swc/counter/-/counter-0.1.3.tgz",
+-      "integrity": "sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ=="
+-    },
+     "node_modules/@swc/helpers": {
+-      "version": "0.5.15",
+-      "resolved": "https://registry.npmjs.org/@swc/helpers/-/helpers-0.5.15.tgz",
+-      "integrity": "sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==",
++      "version": "0.5.23",
++      "resolved": "https://registry.npmjs.org/@swc/helpers/-/helpers-0.5.23.tgz",
++      "integrity": "sha512-5lSsMOTXURePglDfvuAQUqkGek9Hg2kksOYay2m0+XR++b2NWYL/4sWyuvVBIs8oKnJaxkdi9whaL/sqN13afw==",
++      "license": "Apache-2.0",
+       "dependencies": {
+         "tslib": "^2.8.0"
+       }
+@@ -6756,6 +6888,18 @@
+         }
+       ]
+     },
++    "node_modules/baseline-browser-mapping": {
++      "version": "2.11.20",
++      "resolved": "https://registry.npmjs.org/baseline-browser-mapping/-/baseline-browser-mapping-2.11.20.tgz",
++      "integrity": "sha512-H0ulySigv6icDJ1F7SjtdCD6PrhTpdYCmP0CactWy1+ekh0AFd0o1Wn5T8b+hnTmdBx19u9yhL6wvCylXMY7zw==",
++      "license": "Apache-2.0",
++      "bin": {
++        "baseline-browser-mapping": "dist/cli.cjs"
++      },
++      "engines": {
++        "node": ">=6.0.0"
++      }
++    },
+     "node_modules/bignumber.js": {
+       "version": "9.1.2",
+       "resolved": "https://registry.npmjs.org/bignumber.js/-/bignumber.js-9.1.2.tgz",
+@@ -6883,17 +7027,6 @@
+         "node": ">= 0.10.x"
+       }
+     },
+-    "node_modules/busboy": {
+-      "version": "1.6.0",
+-      "resolved": "https://registry.npmjs.org/busboy/-/busboy-1.6.0.tgz",
+-      "integrity": "sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==",
+-      "dependencies": {
+-        "streamsearch": "^1.1.0"
+-      },
+-      "engines": {
+-        "node": ">=10.16.0"
+-      }
+-    },
+     "node_modules/bytes": {
+       "version": "3.1.2",
+       "resolved": "https://registry.npmjs.org/bytes/-/bytes-3.1.2.tgz",
+@@ -7214,19 +7347,6 @@
+         "node": ">=6"
+       }
+     },
+-    "node_modules/color": {
+-      "version": "4.2.3",
+-      "resolved": "https://registry.npmjs.org/color/-/color-4.2.3.tgz",
+-      "integrity": "sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==",
+-      "optional": true,
+-      "dependencies": {
+-        "color-convert": "^2.0.1",
+-        "color-string": "^1.9.0"
+-      },
+-      "engines": {
+-        "node": ">=12.5.0"
+-      }
+-    },
+     "node_modules/color-convert": {
+       "version": "2.0.1",
+       "resolved": "https://registry.npmjs.org/color-convert/-/color-convert-2.0.1.tgz",
+@@ -7653,9 +7773,10 @@
+       }
+     },
+     "node_modules/detect-libc": {
+-      "version": "2.0.4",
+-      "resolved": "https://registry.npmjs.org/detect-libc/-/detect-libc-2.0.4.tgz",
+-      "integrity": "sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==",
++      "version": "2.1.2",
++      "resolved": "https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.2.tgz",
++      "integrity": "sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==",
++      "license": "Apache-2.0",
+       "optional": true,
+       "engines": {
+         "node": ">=8"
+@@ -10165,15 +10286,16 @@
+       }
+     },
+     "node_modules/nanoid": {
+-      "version": "3.3.8",
+-      "resolved": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.8.tgz",
+-      "integrity": "sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==",
++      "version": "3.3.18",
++      "resolved": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.18.tgz",
++      "integrity": "sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==",
+       "funding": [
+         {
+           "type": "github",
+           "url": "https://github.com/sponsors/ai"
+         }
+       ],
++      "license": "MIT",
+       "bin": {
+         "nanoid": "bin/nanoid.cjs"
+       },
+@@ -10197,38 +10319,38 @@
+       "license": "MIT"
+     },
+     "node_modules/next": {
+-      "version": "15.3.3",
+-      "resolved": "https://registry.npmjs.org/next/-/next-15.3.3.tgz",
+-      "integrity": "sha512-JqNj29hHNmCLtNvd090SyRbXJiivQ+58XjCcrC50Crb5g5u2zi7Y2YivbsEfzk6AtVI80akdOQbaMZwWB1Hthw==",
+-      "dependencies": {
+-        "@next/env": "15.3.3",
+-        "@swc/counter": "0.1.3",
+-        "@swc/helpers": "0.5.15",
+-        "busboy": "1.6.0",
++      "version": "16.3.4",
++      "resolved": "https://registry.npmjs.org/next/-/next-16.3.4.tgz",
++      "integrity": "sha512-/Ztf6CeRH+ejEXUrYtqI4gkS66eFIHuSwqi60RgcpWKodxFZx2/dqVCMKBwILfAHXQ+F1b1vAudgj3mnxqtoIA==",
++      "license": "MIT",
++      "dependencies": {
++        "@next/env": "16.3.4",
++        "@swc/helpers": "0.5.23",
++        "baseline-browser-mapping": "^2.9.19",
+         "caniuse-lite": "^1.0.30001579",
+-        "postcss": "8.4.31",
++        "postcss": "8.5.23",
+         "styled-jsx": "5.1.6"
+       },
+       "bin": {
+         "next": "dist/bin/next"
+       },
+       "engines": {
+-        "node": "^18.18.0 || ^19.8.0 || >= 20.0.0"
++        "node": ">=20.9.0"
+       },
+       "optionalDependencies": {
+-        "@next/swc-darwin-arm64": "15.3.3",
+-        "@next/swc-darwin-x64": "15.3.3",
+-        "@next/swc-linux-arm64-gnu": "15.3.3",
+-        "@next/swc-linux-arm64-musl": "15.3.3",
+-        "@next/swc-linux-x64-gnu": "15.3.3",
+-        "@next/swc-linux-x64-musl": "15.3.3",
+-        "@next/swc-win32-arm64-msvc": "15.3.3",
+-        "@next/swc-win32-x64-msvc": "15.3.3",
+-        "sharp": "^0.34.1"
++        "@next/swc-darwin-arm64": "16.3.4",
++        "@next/swc-darwin-x64": "16.3.4",
++        "@next/swc-linux-arm64-gnu": "16.3.4",
++        "@next/swc-linux-arm64-musl": "16.3.4",
++        "@next/swc-linux-x64-gnu": "16.3.4",
++        "@next/swc-linux-x64-musl": "16.3.4",
++        "@next/swc-win32-arm64-msvc": "16.3.4",
++        "@next/swc-win32-x64-msvc": "16.3.4",
++        "sharp": "^0.35.4"
+       },
+       "peerDependencies": {
+         "@opentelemetry/api": "^1.1.0",
+-        "@playwright/test": "^1.41.2",
++        "@playwright/test": "^1.51.1",
+         "babel-plugin-react-compiler": "*",
+         "react": "^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0",
+         "react-dom": "^18.2.0 || 19.0.0-rc-de68d2f4-20241204 || ^19.0.0",
+@@ -10249,33 +10371,6 @@
+         }
+       }
+     },
+-    "node_modules/next/node_modules/postcss": {
+-      "version": "8.4.31",
+-      "resolved": "https://registry.npmjs.org/postcss/-/postcss-8.4.31.tgz",
+-      "integrity": "sha512-PS08Iboia9mts/2ygV3eLpY5ghnUcfLV/EXTOW1E2qYxJKGGBUtNjN76FYHnMs36RmARn41bC0AZmn+rR0OVpQ==",
+-      "funding": [
+-        {
+-          "type": "opencollective",
+-          "url": "https://opencollective.com/postcss/"
+-        },
+-        {
+-          "type": "tidelift",
+-          "url": "https://tidelift.com/funding/github/npm/postcss"
+-        },
+-        {
+-          "type": "github",
+-          "url": "https://github.com/sponsors/ai"
+-        }
+-      ],
+-      "dependencies": {
+-        "nanoid": "^3.3.6",
+-        "picocolors": "^1.0.0",
+-        "source-map-js": "^1.0.2"
+-      },
+-      "engines": {
+-        "node": "^10 || ^12 || >=14"
+-      }
+-    },
+     "node_modules/node-domexception": {
+       "version": "1.0.0",
+       "resolved": "https://registry.npmjs.org/node-domexception/-/node-domexception-1.0.0.tgz",
+@@ -10734,9 +10829,9 @@
+       }
+     },
+     "node_modules/postcss": {
+-      "version": "8.5.2",
+-      "resolved": "https://registry.npmjs.org/postcss/-/postcss-8.5.2.tgz",
+-      "integrity": "sha512-MjOadfU3Ys9KYoX0AdkBlFEF1Vx37uCCeN4ZHnmwm9FfpbsGWMZeBLMmmpY+6Ocqod7mkdZ0DT31OlbsFrLlkA==",
++      "version": "8.5.23",
++      "resolved": "https://registry.npmjs.org/postcss/-/postcss-8.5.23.tgz",
++      "integrity": "sha512-g50586zr4bZmwFiTlflMu8E0bDTb5I5gertgwAKmsdUlTQIhZtunzUlD1WSzwcVWPoAVpsrA6vlfCD7oXvRwgg==",
+       "funding": [
+         {
+           "type": "opencollective",
+@@ -10751,8 +10846,9 @@
+           "url": "https://github.com/sponsors/ai"
+         }
+       ],
++      "license": "MIT",
+       "dependencies": {
+-        "nanoid": "^3.3.8",
++        "nanoid": "^3.3.16",
+         "picocolors": "^1.1.1",
+         "source-map-js": "^1.2.1"
+       },
+@@ -11628,9 +11724,10 @@
+       }
+     },
+     "node_modules/semver": {
+-      "version": "7.7.2",
+-      "resolved": "https://registry.npmjs.org/semver/-/semver-7.7.2.tgz",
+-      "integrity": "sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==",
++      "version": "7.8.5",
++      "resolved": "https://registry.npmjs.org/semver/-/semver-7.8.5.tgz",
++      "integrity": "sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==",
++      "license": "ISC",
+       "bin": {
+         "semver": "bin/semver.js"
+       },
+@@ -11727,44 +11824,53 @@
+       "license": "ISC"
+     },
+     "node_modules/sharp": {
+-      "version": "0.34.2",
+-      "resolved": "https://registry.npmjs.org/sharp/-/sharp-0.34.2.tgz",
+-      "integrity": "sha512-lszvBmB9QURERtyKT2bNmsgxXK0ShJrL/fvqlonCo7e6xBF8nT8xU6pW+PMIbLsz0RxQk3rgH9kd8UmvOzlMJg==",
+-      "hasInstallScript": true,
++      "version": "0.35.4",
++      "resolved": "https://registry.npmjs.org/sharp/-/sharp-0.35.4.tgz",
++      "integrity": "sha512-n++8XWcj+jCOr2IOl7h8LbKnGBDY4aPbmprMONBNFdn0ImXqpGVv5zliDs0V9HbmbCQLpbuo2ej9rAoOQTvMDA==",
++      "license": "Apache-2.0",
+       "optional": true,
+       "dependencies": {
+-        "color": "^4.2.3",
+-        "detect-libc": "^2.0.4",
+-        "semver": "^7.7.2"
++        "@img/colour": "^1.1.0",
++        "detect-libc": "^2.1.2",
++        "semver": "^7.8.5"
+       },
+       "engines": {
+-        "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
++        "node": ">=20.9.0"
+       },
+       "funding": {
+         "url": "https://opencollective.com/libvips"
+       },
+       "optionalDependencies": {
+-        "@img/sharp-darwin-arm64": "0.34.2",
+-        "@img/sharp-darwin-x64": "0.34.2",
+-        "@img/sharp-libvips-darwin-arm64": "1.1.0",
+-        "@img/sharp-libvips-darwin-x64": "1.1.0",
+-        "@img/sharp-libvips-linux-arm": "1.1.0",
+-        "@img/sharp-libvips-linux-arm64": "1.1.0",
+-        "@img/sharp-libvips-linux-ppc64": "1.1.0",
+-        "@img/sharp-libvips-linux-s390x": "1.1.0",
+-        "@img/sharp-libvips-linux-x64": "1.1.0",
+-        "@img/sharp-libvips-linuxmusl-arm64": "1.1.0",
+-        "@img/sharp-libvips-linuxmusl-x64": "1.1.0",
+-        "@img/sharp-linux-arm": "0.34.2",
+-        "@img/sharp-linux-arm64": "0.34.2",
+-        "@img/sharp-linux-s390x": "0.34.2",
+-        "@img/sharp-linux-x64": "0.34.2",
+-        "@img/sharp-linuxmusl-arm64": "0.34.2",
+-        "@img/sharp-linuxmusl-x64": "0.34.2",
+-        "@img/sharp-wasm32": "0.34.2",
+-        "@img/sharp-win32-arm64": "0.34.2",
+-        "@img/sharp-win32-ia32": "0.34.2",
+-        "@img/sharp-win32-x64": "0.34.2"
++        "@img/sharp-darwin-arm64": "0.35.4",
++        "@img/sharp-darwin-x64": "0.35.4",
++        "@img/sharp-freebsd-wasm32": "0.35.4",
++        "@img/sharp-libvips-darwin-arm64": "1.3.3",
++        "@img/sharp-libvips-darwin-x64": "1.3.3",
++        "@img/sharp-libvips-linux-arm": "1.3.3",
++        "@img/sharp-libvips-linux-arm64": "1.3.3",
++        "@img/sharp-libvips-linux-ppc64": "1.3.3",
++        "@img/sharp-libvips-linux-riscv64": "1.3.3",
++        "@img/sharp-libvips-linux-s390x": "1.3.3",
++        "@img/sharp-libvips-linux-x64": "1.3.3",
++        "@img/sharp-libvips-linuxmusl-arm64": "1.3.3",
++        "@img/sharp-libvips-linuxmusl-x64": "1.3.3",
++        "@img/sharp-linux-arm": "0.35.4",
++        "@img/sharp-linux-arm64": "0.35.4",
++        "@img/sharp-linux-ppc64": "0.35.4",
++        "@img/sharp-linux-riscv64": "0.35.4",
++        "@img/sharp-linux-s390x": "0.35.4",
++        "@img/sharp-linux-x64": "0.35.4",
++        "@img/sharp-linuxmusl-arm64": "0.35.4",
++        "@img/sharp-linuxmusl-x64": "0.35.4",
++        "@img/sharp-webcontainers-wasm32": "0.35.4",
++        "@img/sharp-win32-arm64": "0.35.4",
++        "@img/sharp-win32-ia32": "0.35.4",
++        "@img/sharp-win32-x64": "0.35.4"
++      },
++      "peerDependenciesMeta": {
++        "@types/node": {
++          "optional": true
++        }
+       }
+     },
+     "node_modules/shebang-command": {
+@@ -11968,14 +12074,6 @@
+       "devOptional": true,
+       "license": "MIT"
+     },
+-    "node_modules/streamsearch": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/streamsearch/-/streamsearch-1.1.0.tgz",
+-      "integrity": "sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==",
+-      "engines": {
+-        "node": ">=10.0.0"
+-      }
+-    },
+     "node_modules/string_decoder": {
+       "version": "1.3.0",
+       "resolved": "https://registry.npmjs.org/string_decoder/-/string_decoder-1.3.0.tgz",
+diff --git a/package.json b/package.json
+index 8badf73..a0575b2 100644
+--- a/package.json
++++ b/package.json
+@@ -44,7 +44,7 @@
+     "firebase": "^11.9.1",
+     "genkit": "^1.20.0",
+     "lucide-react": "^0.475.0",
+-    "next": "15.3.3",
++    "next": "^16.3.4",
+     "patch-package": "^8.0.0",
+     "react": "^18.3.1",
+     "react-day-picker": "^8.10.1",
+-- 
+2.39.5
+
