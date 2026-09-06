@@ -67,6 +67,9 @@ export default function NutritionAssistant() {
               <CardDescription>
                 Quanto mais detalhes, melhor será a recomendação da nossa IA.
               </CardDescription>
+              <p className="text-xs text-muted-foreground mt-2">
+                As sugestões são gerais e não substituem a avaliação de um nutricionista ou médico.
+              </p>
             </CardHeader>
             <CardContent>
               <Form {...form}>
@@ -79,6 +82,7 @@ export default function NutritionAssistant() {
                         <FormLabel>Necessidades Dietéticas</FormLabel>
                         <FormControl>
                           <Textarea
+                            aria-label="Descreva suas necessidades dietéticas"
                             placeholder="Ex: Sou vegano, intolerante à lactose, busco perder peso..."
                             {...field}
                             rows={4}
@@ -96,6 +100,7 @@ export default function NutritionAssistant() {
                         <FormLabel>Preferências de Produtos</FormLabel>
                         <FormControl>
                           <Textarea
+                            aria-label="Descreva suas preferências de produtos"
                             placeholder="Ex: Gosto de snacks crocantes, prefiro bebidas doces, preciso de algo prático para o café da manhã..."
                             {...field}
                             rows={4}

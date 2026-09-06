@@ -36,18 +36,12 @@ function formatUnit(unit: string): string {
   return unitMap[unit] || unit;
 }
 
-// Função auxiliar para determinar badges
+// Exibe somente etiquetas baseadas em atributos reais do produto.
 function getProductBadges(product: Product): Array<{ label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> {
   const badges: Array<{ label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = [];
-  
-  // Exemplo: produtos com ID que começa com 'v' são "Novos"
-  if (product.id.startsWith('v')) {
-    badges.push({ label: 'Novo', variant: 'default' });
-  }
-  
-  // Exemplo: produtos com preço < 20 são "Promoção"
-  if (product.price < 20) {
-    badges.push({ label: 'Promoção', variant: 'secondary' });
+
+  if (product.description.toLowerCase().includes('feito na hora')) {
+    badges.push({ label: 'Feito na hora', variant: 'secondary' });
   }
   
   return badges;
@@ -79,7 +73,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
         <div className="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 relative">
           <Image
             src={product.image.imageUrl}
-            alt={product.description}
+            alt={`${product.name}: ${product.description}`}
             fill
             className="object-cover"
             data-ai-hint={product.image.imageHint}
@@ -113,7 +107,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
 
             <Dialog open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                  <Button aria-label={`Adicionar ${product.name} ao carrinho`} className="bg-accent hover:bg-accent/90 text-accent-foreground">
                   <ShoppingCart className="mr-2 h-4 w-4" />
                   <span className="hidden sm:inline">Adicionar</span>
                 </Button>
@@ -125,14 +119,14 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
                 </DialogHeader>
                 <div className="py-4 space-y-4">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="quantity">Quantidade</Label>
+                    <Label htmlFor={`quantity-${product.id}`}>Quantidade</Label>
                     <span className="text-sm text-muted-foreground">
                       Preço: {formatPrice(product.price)}/{formatUnit(product.unit)}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Input
-                      id="quantity"
+                      id={`quantity-${product.id}`}
                       type="number"
                       step="0.01"
                       min="0.01"
@@ -180,7 +174,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
         <div className="aspect-[3/2] relative">
           <Image
             src={product.image.imageUrl}
-            alt={product.description}
+            alt={`${product.name}: ${product.description}`}
             fill
             className="object-cover"
             data-ai-hint={product.image.imageHint}
@@ -228,7 +222,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
         
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+            <Button aria-label={`Adicionar ${product.name} ao carrinho`} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
               <ShoppingCart className="mr-2 h-4 w-4" />
               Adicionar ao Carrinho
             </Button>
@@ -240,14 +234,14 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
             </DialogHeader>
             <div className="py-4 space-y-4">
               <div className="flex items-center justify-between">
-                <Label htmlFor="quantity">Quantidade</Label>
+                  <Label htmlFor={`quantity-${product.id}`}>Quantidade</Label>
                 <span className="text-sm text-muted-foreground">
                   Preço: {formatPrice(product.price)}/{formatUnit(product.unit)}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <Input
-                  id="quantity"
+                    id={`quantity-${product.id}`}
                   type="number"
                   step="0.01"
                   min="0.01"
