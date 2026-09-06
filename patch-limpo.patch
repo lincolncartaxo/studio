@@ -1,0 +1,226 @@
+diff --git a/src/components/nutrition-assistant.tsx b/src/components/nutrition-assistant.tsx
+index a9d452b..c4043a9 100644
+--- a/src/components/nutrition-assistant.tsx
++++ b/src/components/nutrition-assistant.tsx
+@@ -67,6 +67,9 @@ export default function NutritionAssistant() {
+               <CardDescription>
+                 Quanto mais detalhes, melhor será a recomendação da nossa IA.
+               </CardDescription>
++              <p className="text-xs text-muted-foreground mt-2">
++                As sugestões são gerais e não substituem a avaliação de um nutricionista ou médico.
++              </p>
+             </CardHeader>
+             <CardContent>
+               <Form {...form}>
+@@ -79,6 +82,7 @@ export default function NutritionAssistant() {
+                         <FormLabel>Necessidades Dietéticas</FormLabel>
+                         <FormControl>
+                           <Textarea
++                            aria-label="Descreva suas necessidades dietéticas"
+                             placeholder="Ex: Sou vegano, intolerante à lactose, busco perder peso..."
+                             {...field}
+                             rows={4}
+@@ -96,6 +100,7 @@ export default function NutritionAssistant() {
+                         <FormLabel>Preferências de Produtos</FormLabel>
+                         <FormControl>
+                           <Textarea
++                            aria-label="Descreva suas preferências de produtos"
+                             placeholder="Ex: Gosto de snacks crocantes, prefiro bebidas doces, preciso de algo prático para o café da manhã..."
+                             {...field}
+                             rows={4}
+diff --git a/src/components/product-card.tsx b/src/components/product-card.tsx
+index 43a4114..433785d 100644
+--- a/src/components/product-card.tsx
++++ b/src/components/product-card.tsx
+@@ -36,18 +36,12 @@ function formatUnit(unit: string): string {
+   return unitMap[unit] || unit;
+ }
+ 
+-// Função auxiliar para determinar badges
++// Exibe somente etiquetas baseadas em atributos reais do produto.
+ function getProductBadges(product: Product): Array<{ label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> {
+   const badges: Array<{ label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = [];
+-  
+-  // Exemplo: produtos com ID que começa com 'v' são "Novos"
+-  if (product.id.startsWith('v')) {
+-    badges.push({ label: 'Novo', variant: 'default' });
+-  }
+-  
+-  // Exemplo: produtos com preço < 20 são "Promoção"
+-  if (product.price < 20) {
+-    badges.push({ label: 'Promoção', variant: 'secondary' });
++
++  if (product.description.toLowerCase().includes('feito na hora')) {
++    badges.push({ label: 'Feito na hora', variant: 'secondary' });
+   }
+   
+   return badges;
+@@ -79,7 +73,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
+         <div className="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 relative">
+           <Image
+             src={product.image.imageUrl}
+-            alt={product.description}
++            alt={`${product.name}: ${product.description}`}
+             fill
+             className="object-cover"
+             data-ai-hint={product.image.imageHint}
+@@ -113,7 +107,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
+ 
+             <Dialog open={open} onOpenChange={setOpen}>
+               <DialogTrigger asChild>
+-                <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
++                  <Button aria-label={`Adicionar ${product.name} ao carrinho`} className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                   <ShoppingCart className="mr-2 h-4 w-4" />
+                   <span className="hidden sm:inline">Adicionar</span>
+                 </Button>
+@@ -125,14 +119,14 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
+                 </DialogHeader>
+                 <div className="py-4 space-y-4">
+                   <div className="flex items-center justify-between">
+-                    <Label htmlFor="quantity">Quantidade</Label>
++                    <Label htmlFor={`quantity-${product.id}`}>Quantidade</Label>
+                     <span className="text-sm text-muted-foreground">
+                       Preço: {formatPrice(product.price)}/{formatUnit(product.unit)}
+                     </span>
+                   </div>
+                   <div className="flex items-center gap-2">
+                     <Input
+-                      id="quantity"
++                      id={`quantity-${product.id}`}
+                       type="number"
+                       step="0.01"
+                       min="0.01"
+@@ -180,7 +174,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
+         <div className="aspect-[3/2] relative">
+           <Image
+             src={product.image.imageUrl}
+-            alt={product.description}
++            alt={`${product.name}: ${product.description}`}
+             fill
+             className="object-cover"
+             data-ai-hint={product.image.imageHint}
+@@ -228,7 +222,7 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
+         
+         <Dialog open={open} onOpenChange={setOpen}>
+           <DialogTrigger asChild>
+-            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
++            <Button aria-label={`Adicionar ${product.name} ao carrinho`} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">
+               <ShoppingCart className="mr-2 h-4 w-4" />
+               Adicionar ao Carrinho
+             </Button>
+@@ -240,14 +234,14 @@ export default function ProductCard({ product, viewMode = 'grid' }: ProductCardP
+             </DialogHeader>
+             <div className="py-4 space-y-4">
+               <div className="flex items-center justify-between">
+-                <Label htmlFor="quantity">Quantidade</Label>
++                  <Label htmlFor={`quantity-${product.id}`}>Quantidade</Label>
+                 <span className="text-sm text-muted-foreground">
+                   Preço: {formatPrice(product.price)}/{formatUnit(product.unit)}
+                 </span>
+               </div>
+               <div className="flex items-center gap-2">
+                 <Input
+-                  id="quantity"
++                    id={`quantity-${product.id}`}
+                   type="number"
+                   step="0.01"
+                   min="0.01"
+diff --git a/src/components/shopping-cart.tsx b/src/components/shopping-cart.tsx
+index 61edc4c..47844a8 100644
+--- a/src/components/shopping-cart.tsx
++++ b/src/components/shopping-cart.tsx
+@@ -60,7 +60,7 @@ export default function ShoppingCart() {
+   return (
+     <Sheet>
+       <SheetTrigger asChild>
+-        <Button variant="ghost" size="icon" className="relative">
++        <Button variant="ghost" size="icon" aria-label={`Abrir carrinho${items.length ? ` com ${items.length} ${items.length === 1 ? 'item' : 'itens'}` : ''}`} className="relative">
+           <ShoppingCartIcon className="h-5 w-5" />
+           {items.length > 0 && (
+             <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
+diff --git a/src/lib/placeholder-images.json b/src/lib/placeholder-images.json
+index a236318..bffabd7 100644
+--- a/src/lib/placeholder-images.json
++++ b/src/lib/placeholder-images.json
+@@ -3,68 +3,68 @@
+     {
+       "id": "juice",
+       "description": "Copo de suco natural refrescante",
+-      "imageUrl": "https://images.unsplash.com/photo-1622597467836-f38240662f55?q=80&w=1080&auto=format&fit=crop",
++      "imageUrl": "/products/juice.jpg",
+       "imageHint": "suco de fruta natural no copo"
+     },
+     {
+       "id": "detox-shake",
+       "description": "Shake funcional refrescante",
+-      "imageUrl": "https://images.unsplash.com/photo-1556881286-fc6915169721?q=80&w=1080&auto=format&fit=crop",
++      "imageUrl": "/products/smoothie.jpg",
+       "imageHint": "suco detox ou smoothie de frutas no copo"
+     },
+     {
+       "id": "energy-smoothie",
+       "description": "Vitamina energética com frutas",
+-      "imageUrl": "https://images.unsplash.com/photo-1577805947697-89e18249d767?q=80&w=1080&auto=format&fit=crop",
++      "imageUrl": "/products/smoothie.jpg",
+       "imageHint": "vitamina grossa no copo"
+     },
+     {
+       "id": "green-juice",
+       "description": "Suco verde detox refrescante",
+-      "imageUrl": "https://images.unsplash.com/photo-1600850056064-a8b380df8395?q=80&w=1080&auto=format&fit=crop",
++      "imageUrl": "/products/green-juice.jpg",
+       "imageHint": "suco verde detox"
+     },
+     {
+       "id": "protein-powder",
+       "description": "Shake de proteína cremoso",
+-      "imageUrl": "https://images.unsplash.com/photo-1579722820308-d74e571900a9?q=80&w=1080&auto=format&fit=crop",
++      "imageUrl": "/products/protein.jpg",
+       "imageHint": "shake proteico de chocolate ou creme"
+     },
+     {
+       "id": "bowl",
+       "description": "Tigela de açaí com frutas",
+-      "imageUrl": "https://images.unsplash.com/photo-1590005024462-09419b48c691?q=80&w=1080&auto=format&fit=crop",
++      "imageUrl": "/products/juice.jpg",
+       "imageHint": "tigela de açaí com granola"
+     },
+     {
+       "id": "snack",
+       "description": "Salgado assado saudável",
+-      "imageUrl": "https://images.unsplash.com/photo-1543363363-2287c8d929aa?q=80&w=1080&auto=format&fit=crop",
++      "imageUrl": "/products/meal.jpg",
+       "imageHint": "salgado assado ou empada"
+     },
+     {
+       "id": "meal",
+       "description": "Refeição saudável e colorida",
+-      "imageUrl": "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=1080&auto=format&fit=crop",
++      "imageUrl": "/products/meal.jpg",
+       "imageHint": "prato de comida saudável com legumes e frango"
+     },
+     {
+       "id": "bottle",
+       "description": "Bebida em garrafa gelada",
+-      "imageUrl": "https://images.unsplash.com/photo-1527960471264-932f2fb4c23e?q=80&w=1080&auto=format&fit=crop",
++      "imageUrl": "/products/juice.jpg",
+       "imageHint": "garrafa de bebida esportiva ou água"
+     },
+     {
+       "id": "hero-image",
+       "description": "Produtos naturais e vida saudável",
+-      "imageUrl": "https://images.unsplash.com/photo-1490818387583-1baba5e638ca?q=80&w=1080&auto=format&fit=crop",
++      "imageUrl": "/products/meal.jpg",
+       "imageHint": "comida saudável natural"
+     },
+     {
+       "id": "assistant-image",
+       "description": "Nutricionista sorrindo",
+-      "imageUrl": "https://images.unsplash.com/photo-1675526607070-f5cbd71dde92?q=80&w=1080&auto=format&fit=crop",
++      "imageUrl": "/products/assistant.jpg",
+       "imageHint": "nutricionista sorrindo"
+     }
+   ]
+-}
+\ No newline at end of file
++}

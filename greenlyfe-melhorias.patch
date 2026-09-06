@@ -1,0 +1,226 @@
+[1mdiff --git a/src/components/nutrition-assistant.tsx b/src/components/nutrition-assistant.tsx[m
+[1mindex a9d452b..c4043a9 100644[m
+[1m--- a/src/components/nutrition-assistant.tsx[m
+[1m+++ b/src/components/nutrition-assistant.tsx[m
+[36m@@ -67,6 +67,9 @@[m [mexport default function NutritionAssistant() {[m
+               <CardDescription>[m
+                 Quanto mais detalhes, melhor será a recomendação da nossa IA.[m
+               </CardDescription>[m
+[32m+[m[32m              <p className="text-xs text-muted-foreground mt-2">[m
+[32m+[m[32m                As sugestões são gerais e não substituem a avaliação de um nutricionista ou médico.[m
+[32m+[m[32m              </p>[m
+             </CardHeader>[m
+             <CardContent>[m
+               <Form {...form}>[m
+[36m@@ -79,6 +82,7 @@[m [mexport default function NutritionAssistant() {[m
+                         <FormLabel>Necessidades Dietéticas</FormLabel>[m
+                         <FormControl>[m
+                           <Textarea[m
+[32m+[m[32m                            aria-label="Descreva suas necessidades dietéticas"[m
+                             placeholder="Ex: Sou vegano, intolerante à lactose, busco perder peso..."[m
+                             {...field}[m
+                             rows={4}[m
+[36m@@ -96,6 +100,7 @@[m [mexport default function NutritionAssistant() {[m
+                         <FormLabel>Preferências de Produtos</FormLabel>[m
+                         <FormControl>[m
+                           <Textarea[m
+[32m+[m[32m                            aria-label="Descreva suas preferências de produtos"[m
+                             placeholder="Ex: Gosto de snacks crocantes, prefiro bebidas doces, preciso de algo prático para o café da manhã..."[m
+                             {...field}[m
+                             rows={4}[m
+[1mdiff --git a/src/components/product-card.tsx b/src/components/product-card.tsx[m
+[1mindex 43a4114..433785d 100644[m
+[1m--- a/src/components/product-card.tsx[m
+[1m+++ b/src/components/product-card.tsx[m
+[36m@@ -36,18 +36,12 @@[m [mfunction formatUnit(unit: string): string {[m
+   return unitMap[unit] || unit;[m
+ }[m
+ [m
+[31m-// Função auxiliar para determinar badges[m
+[32m+[m[32m// Exibe somente etiquetas baseadas em atributos reais do produto.[m
+ function getProductBadges(product: Product): Array<{ label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> {[m
+   const badges: Array<{ label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = [];[m
+[31m-  [m
+[31m-  // Exemplo: produtos com ID que começa com 'v' são "Novos"[m
+[31m-  if (product.id.startsWith('v')) {[m
+[31m-    badges.push({ label: 'Novo', variant: 'default' });[m
+[31m-  }[m
+[31m-  [m
+[31m-  // Exemplo: produtos com preço < 20 são "Promoção"[m
+[31m-  if (product.price < 20) {[m
+[31m-    badges.push({ label: 'Promoção', variant: 'secondary' });[m
+[32m+[m
+[32m+[m[32m  if (product.description.toLowerCase().includes('feito na hora')) {[m
+[32m+[m[32m    badges.push({ label: 'Feito na hora', variant: 'secondary' });[m
+   }[m
+   [m
+   return badges;[m
+[36m@@ -79,7 +73,7 @@[m [mexport default function ProductCard({ product, viewMode = 'grid' }: ProductCardP[m
+         <div className="w-32 h-32 md:w-40 md:h-40 flex-shrink-0 relative">[m
+           <Image[m
+             src={product.image.imageUrl}[m
+[31m-            alt={product.description}[m
+[32m+[m[32m            alt={`${product.name}: ${product.description}`}[m
+             fill[m
+             className="object-cover"[m
+             data-ai-hint={product.image.imageHint}[m
+[36m@@ -113,7 +107,7 @@[m [mexport default function ProductCard({ product, viewMode = 'grid' }: ProductCardP[m
+ [m
+             <Dialog open={open} onOpenChange={setOpen}>[m
+               <DialogTrigger asChild>[m
+[31m-                <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">[m
+[32m+[m[32m                  <Button aria-label={`Adicionar ${product.name} ao carrinho`} className="bg-accent hover:bg-accent/90 text-accent-foreground">[m
+                   <ShoppingCart className="mr-2 h-4 w-4" />[m
+                   <span className="hidden sm:inline">Adicionar</span>[m
+                 </Button>[m
+[36m@@ -125,14 +119,14 @@[m [mexport default function ProductCard({ product, viewMode = 'grid' }: ProductCardP[m
+                 </DialogHeader>[m
+                 <div className="py-4 space-y-4">[m
+                   <div className="flex items-center justify-between">[m
+[31m-                    <Label htmlFor="quantity">Quantidade</Label>[m
+[32m+[m[32m                    <Label htmlFor={`quantity-${product.id}`}>Quantidade</Label>[m
+                     <span className="text-sm text-muted-foreground">[m
+                       Preço: {formatPrice(product.price)}/{formatUnit(product.unit)}[m
+                     </span>[m
+                   </div>[m
+                   <div className="flex items-center gap-2">[m
+                     <Input[m
+[31m-                      id="quantity"[m
+[32m+[m[32m                      id={`quantity-${product.id}`}[m
+                       type="number"[m
+                       step="0.01"[m
+                       min="0.01"[m
+[36m@@ -180,7 +174,7 @@[m [mexport default function ProductCard({ product, viewMode = 'grid' }: ProductCardP[m
+         <div className="aspect-[3/2] relative">[m
+           <Image[m
+             src={product.image.imageUrl}[m
+[31m-            alt={product.description}[m
+[32m+[m[32m            alt={`${product.name}: ${product.description}`}[m
+             fill[m
+             className="object-cover"[m
+             data-ai-hint={product.image.imageHint}[m
+[36m@@ -228,7 +222,7 @@[m [mexport default function ProductCard({ product, viewMode = 'grid' }: ProductCardP[m
+         [m
+         <Dialog open={open} onOpenChange={setOpen}>[m
+           <DialogTrigger asChild>[m
+[31m-            <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">[m
+[32m+[m[32m            <Button aria-label={`Adicionar ${product.name} ao carrinho`} className="w-full bg-accent hover:bg-accent/90 text-accent-foreground">[m
+               <ShoppingCart className="mr-2 h-4 w-4" />[m
+               Adicionar ao Carrinho[m
+             </Button>[m
+[36m@@ -240,14 +234,14 @@[m [mexport default function ProductCard({ product, viewMode = 'grid' }: ProductCardP[m
+             </DialogHeader>[m
+             <div className="py-4 space-y-4">[m
+               <div className="flex items-center justify-between">[m
+[31m-                <Label htmlFor="quantity">Quantidade</Label>[m
+[32m+[m[32m                  <Label htmlFor={`quantity-${product.id}`}>Quantidade</Label>[m
+                 <span className="text-sm text-muted-foreground">[m
+                   Preço: {formatPrice(product.price)}/{formatUnit(product.unit)}[m
+                 </span>[m
+               </div>[m
+               <div className="flex items-center gap-2">[m
+                 <Input[m
+[31m-                  id="quantity"[m
+[32m+[m[32m                    id={`quantity-${product.id}`}[m
+                   type="number"[m
+                   step="0.01"[m
+                   min="0.01"[m
+[1mdiff --git a/src/components/shopping-cart.tsx b/src/components/shopping-cart.tsx[m
+[1mindex 61edc4c..47844a8 100644[m
+[1m--- a/src/components/shopping-cart.tsx[m
+[1m+++ b/src/components/shopping-cart.tsx[m
+[36m@@ -60,7 +60,7 @@[m [mexport default function ShoppingCart() {[m
+   return ([m
+     <Sheet>[m
+       <SheetTrigger asChild>[m
+[31m-        <Button variant="ghost" size="icon" className="relative">[m
+[32m+[m[32m        <Button variant="ghost" size="icon" aria-label={`Abrir carrinho${items.length ? ` com ${items.length} ${items.length === 1 ? 'item' : 'itens'}` : ''}`} className="relative">[m
+           <ShoppingCartIcon className="h-5 w-5" />[m
+           {items.length > 0 && ([m
+             <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">[m
+[1mdiff --git a/src/lib/placeholder-images.json b/src/lib/placeholder-images.json[m
+[1mindex a236318..bffabd7 100644[m
+[1m--- a/src/lib/placeholder-images.json[m
+[1m+++ b/src/lib/placeholder-images.json[m
+[36m@@ -3,68 +3,68 @@[m
+     {[m
+       "id": "juice",[m
+       "description": "Copo de suco natural refrescante",[m
+[31m-      "imageUrl": "https://images.unsplash.com/photo-1622597467836-f38240662f55?q=80&w=1080&auto=format&fit=crop",[m
+[32m+[m[32m      "imageUrl": "/products/juice.jpg",[m
+       "imageHint": "suco de fruta natural no copo"[m
+     },[m
+     {[m
+       "id": "detox-shake",[m
+       "description": "Shake funcional refrescante",[m
+[31m-      "imageUrl": "https://images.unsplash.com/photo-1556881286-fc6915169721?q=80&w=1080&auto=format&fit=crop",[m
+[32m+[m[32m      "imageUrl": "/products/smoothie.jpg",[m
+       "imageHint": "suco detox ou smoothie de frutas no copo"[m
+     },[m
+     {[m
+       "id": "energy-smoothie",[m
+       "description": "Vitamina energética com frutas",[m
+[31m-      "imageUrl": "https://images.unsplash.com/photo-1577805947697-89e18249d767?q=80&w=1080&auto=format&fit=crop",[m
+[32m+[m[32m      "imageUrl": "/products/smoothie.jpg",[m
+       "imageHint": "vitamina grossa no copo"[m
+     },[m
+     {[m
+       "id": "green-juice",[m
+       "description": "Suco verde detox refrescante",[m
+[31m-      "imageUrl": "https://images.unsplash.com/photo-1600850056064-a8b380df8395?q=80&w=1080&auto=format&fit=crop",[m
+[32m+[m[32m      "imageUrl": "/products/green-juice.jpg",[m
+       "imageHint": "suco verde detox"[m
+     },[m
+     {[m
+       "id": "protein-powder",[m
+       "description": "Shake de proteína cremoso",[m
+[31m-      "imageUrl": "https://images.unsplash.com/photo-1579722820308-d74e571900a9?q=80&w=1080&auto=format&fit=crop",[m
+[32m+[m[32m      "imageUrl": "/products/protein.jpg",[m
+       "imageHint": "shake proteico de chocolate ou creme"[m
+     },[m
+     {[m
+       "id": "bowl",[m
+       "description": "Tigela de açaí com frutas",[m
+[31m-      "imageUrl": "https://images.unsplash.com/photo-1590005024462-09419b48c691?q=80&w=1080&auto=format&fit=crop",[m
+[32m+[m[32m      "imageUrl": "/products/juice.jpg",[m
+       "imageHint": "tigela de açaí com granola"[m
+     },[m
+     {[m
+       "id": "snack",[m
+       "description": "Salgado assado saudável",[m
+[31m-      "imageUrl": "https://images.unsplash.com/photo-1543363363-2287c8d929aa?q=80&w=1080&auto=format&fit=crop",[m
+[32m+[m[32m      "imageUrl": "/products/meal.jpg",[m
+       "imageHint": "salgado assado ou empada"[m
+     },[m
+     {[m
+       "id": "meal",[m
+       "description": "Refeição saudável e colorida",[m
+[31m-      "imageUrl": "https://images.unsplash.com/photo-1512058564366-18510be2db19?q=80&w=1080&auto=format&fit=crop",[m
+[32m+[m[32m      "imageUrl": "/products/meal.jpg",[m
+       "imageHint": "prato de comida saudável com legumes e frango"[m
+     },[m
+     {[m
+       "id": "bottle",[m
+       "description": "Bebida em garrafa gelada",[m
+[31m-      "imageUrl": "https://images.unsplash.com/photo-1527960471264-932f2fb4c23e?q=80&w=1080&auto=format&fit=crop",[m
+[32m+[m[32m      "imageUrl": "/products/juice.jpg",[m
+       "imageHint": "garrafa de bebida esportiva ou água"[m
+     },[m
+     {[m
+       "id": "hero-image",[m
+       "description": "Produtos naturais e vida saudável",[m
+[31m-      "imageUrl": "https://images.unsplash.com/photo-1490818387583-1baba5e638ca?q=80&w=1080&auto=format&fit=crop",[m
+[32m+[m[32m      "imageUrl": "/products/meal.jpg",[m
+       "imageHint": "comida saudável natural"[m
+     },[m
+     {[m
+       "id": "assistant-image",[m
+       "description": "Nutricionista sorrindo",[m
+[31m-      "imageUrl": "https://images.unsplash.com/photo-1675526607070-f5cbd71dde92?q=80&w=1080&auto=format&fit=crop",[m
+[32m+[m[32m      "imageUrl": "/products/assistant.jpg",[m
+       "imageHint": "nutricionista sorrindo"[m
+     }[m
+   ][m
+[31m-}[m
+\ No newline at end of file[m
+[32m+[m[32m}[m
