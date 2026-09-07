@@ -41,7 +41,10 @@ export default function ShoppingCart() {
   const sendToWhatsApp = () => {
     if (items.length === 0) return;
 
-    let message = '🛒 *Pedido - Greenlyfe*\n\n';
+    const cartEmoji = '\uD83D\uDED2';
+    const moneyEmoji = '\uD83D\uDCB0';
+    const smileEmoji = '\uD83D\uDE0A';
+    let message = `${cartEmoji} *Pedido - Greenlyfe*\n\n`;
     items.forEach((item, index) => {
       const subtotal = item.product.price * item.quantity;
       message += `${index + 1}. *${item.product.name}*\n`;
@@ -50,8 +53,8 @@ export default function ShoppingCart() {
       message += `   Subtotal: ${formatPrice(subtotal)}\n\n`;
     });
 
-    message += `💰 *Total Geral: ${formatPrice(getTotalPrice())}*\n\n`;
-    message += 'Por favor, confirme este pedido! 😊';
+    message += `${moneyEmoji} *Total Geral: ${formatPrice(getTotalPrice())}*\n\n`;
+    message += `Por favor, confirme este pedido! ${smileEmoji}`;
 
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
